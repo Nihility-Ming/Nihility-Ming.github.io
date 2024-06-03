@@ -1,0 +1,1 @@
+const firstElement=document.querySelector(".post-tag-list-link"),elements=document.querySelectorAll("a.tag-list-link"),firstElementInnerHTML="#"+firstElement.innerHTML;elements.forEach((e=>{e.innerHTML===firstElementInnerHTML&&e.classList.add("tag-list-link-selected")}));

@@ -1,0 +1,1 @@
+!function(){var n,t=document.getElementById("mrmy");function e(n){var t=n.length;return n[Math.floor(Math.random()*t)]}function o(){if(n){var o=e(n),r=o.author,c="<blockquote><p>"+e(o.content)+"</p><p>—— "+r+"</p></blockquote>";t.innerHTML=c}}t.addEventListener("click",(function(){o()})),fetch("/js/mrmy.json").then((n=>n.json())).then((t=>{n=t,o()}))}();

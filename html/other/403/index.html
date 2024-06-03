@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>403通知 - TraderPuma.com</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" href="/images/touch-icon.jpg">
+<meta name="theme-color" content="#EBF3FD">
+<script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+<script>LA.init({id:"1yxI18dBtpOcAN9I",ck:"1yxI18dBtpOcAN9I"})</script>
+<script>
+
+(function(){
+
+	// 检测当前是否中国大陆地区
+	checkArea();
+
+	document.addEventListener('visibilitychange', function() {
+		if (document.visibilityState === 'visible') {
+			// 页面从后台切换到了前台
+			console.log('页面已切换到前台');
+			checkArea();
+		} else {
+			// 页面从前台切换到了后台
+			console.log('页面已切换到后台');
+		}
+	});
+
+	function checkArea() {
+		// 使用第三方API获取IP地址的地理位置信息
+		fetch(`https://api.ip.sb/geoip/`)
+		  .then(response => response.json())
+		  .then(data => {
+			// 检查用户地理位置是否为中国
+			if (data.country_code === 'CN') {
+			  console.log('用户位于中国地区');
+			  localStorage.setItem('online_contact', true);
+			  open_chatra();
+			} else {
+			  console.log('用户不位于中国地区');
+			  location.replace("/");
+			}
+		  })
+		  .catch(error => {
+			console.error('获取IP地址地理位置信息时发生错误:', error);
+		  });
+	}
+
+	function open_chatra() {
+		if(window.ChatraSetup !== undefined) { return };
+		window.ChatraSetup = {
+			locale: {
+				chat: {
+					input: {
+						placeholder: '在这里输入消息'
+					}
+				},
+				name: '昵称',
+				yourName: '你的昵称',
+				messageTypes: {
+					joinedFirst: '进入聊天',
+					joined: '{{#username}} 现身',
+					agentsOffline: '管理员离线'
+				}
+			},
+			colors:  {
+				buttonText: '#fff',
+				buttonBg: '#4690d6'
+			},
+			chatWidth : 330,
+			chatHeight : 570,
+			zIndex: 20
+		};
+
+		(function(d, w, c) {
+			w.ChatraID = 'DLTirwYNnHxttCXoh';
+			var s = d.createElement('script');
+			w[c] = w[c] || function() {
+				(w[c].q = w[c].q || []).push(arguments);
+			};
+			s.async = true;
+			s.src = 'https://call.chatra.io/chatra.js';
+			if (d.head) d.head.appendChild(s);
+		})(document, window, 'Chatra');
+	}
+
+})();
+</script>
+
+  <style>
+    html, body {
+      font-size: 16px;
+      line-height: 1.5;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, "Helvetica Neue", "Source Han Sans SC", "Noto Sans CJK SC", "WenQuanYi Micro Hei", sans-serif, "\5B8B\4F53";
+      margin: 0;
+      height: 100%;
+      color: #141722;
+    }
+
+    article {
+      position: relative;
+      background: #EBF3FD;
+      display: flex;
+      height: inherit;
+    }
+
+    section {
+      box-sizing: border-box;
+      max-width: 580px;
+      margin: auto;
+      background: #fff;
+      padding: 52px 40px 38px;
+      text-align: justify;
+      box-shadow: 0 6px 16px -8px rgba(13,24,38,0.08), 0 9px 28px 0 rgba(13,24,38,0.05), 0 12px 48px 16px rgba(13,24,38,0.03);
+      border-radius: 2px;
+    }
+
+    h2, p {
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    h2 {
+      font-weight: normal;
+      margin-bottom: 10px;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .smaller {
+      font-size: 14px;
+      line-height: 22px;
+    }
+  </style>
+</head>
+
+<body>
+  <article>
+    <section>
+      <div class="logo">
+		<img src="/images/website_logo.jpg"  style="height:60px;aspect-ratio:702/163;" alt="TraderPuma.com" title="比特趋势大作手"/>
+	  </div>
+      <h2>尊敬的中国境内友人：</h2>
+      <p>为积极响应中国政府监管政策要求，即日起，Traderpuma.com 不对中国境内友人开放。</p>
+      <p style="margin-top: 2em;color:red;">Traderpuma.com 没有任何社交账号和交流群，更不会主动添加你为好友，谨防假冒！</p>
+      <p style="margin-top: 2em;">如有问题，可点右下角图标在线询问，或发送邮件到 <a href="mailto:msg@traderpuma.com">msg@traderpuma.com</a> 询问。</p>
+      <p style="text-align: right;margin-top: 2em;" class="smaller">
+        本喵喵
+        <br />
+        2024年4月17日
+      </p>
+    </section>
+  </article>
+</body>
+</html>

@@ -1,0 +1,1 @@
+!function(){if(window.navigator.standalone){var e=document.createElement("script");e.src="/js/pulltorefresh/pulltorefresh.min.js",e.addEventListener("load",(()=>{PullToRefresh.init({onRefresh:function(){window.location.reload()}})}),!1),document.body.appendChild(e)}}();

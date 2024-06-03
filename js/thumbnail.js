@@ -1,0 +1,1 @@
+!function(){for(var t=[],n=1;n<=BTCPicturesCount;n++)t.push(n.toString().padStart(3,"0"));function r(){if(0===t.length)return null;var n=Math.floor(Math.random()*t.length);return"/btc-pictures/thumbnail/"+t.splice(n,1)[0]+".jpg"}var e=document.getElementsByClassName("list-thumbnail");for(n=0;n<e.length;n++)e[n].setAttribute("data-src",r())}();

@@ -1,0 +1,1 @@
+let tianliGPT_postSelector="#article-content-wrap",tianliGPT_key="ff29e52833f2bad74857";

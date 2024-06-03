@@ -1,0 +1,1 @@
+var ydata=[],xdata=[];function paraData(){let t=totalMoney*position;for(let o=0;o<tradeNum;o++)if(xdata[o]=o+1,positionMoney=totalMoney*position,getRndInteger(1,100)<=100*winRate?totalMoney+=getRndInteger(winLoseRate_1,winLoseRate_2)*positionMoney:totalMoney-=positionMoney,ydata[o]=totalMoney.toFixed(2),totalMoney<t){alert("已经爆仓"),boom=!0;break}}
