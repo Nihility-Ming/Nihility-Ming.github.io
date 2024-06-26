@@ -1,1 +1,18 @@
-!function(){var e;window.screen.width>1e3?((e=document.createElement("script")).src="/js/mychat.js",document.body.appendChild(e)):localStorage.getItem("online_contact")&&((e=document.createElement("script")).src="/js/mychat.js",document.body.appendChild(e),document.querySelector(".lrtoolbar").style.marginBottom="95px",document.querySelector(".lrtoolbar .lrtoolbar-contact").style.display="none")}();
+(function(){
+	if (window.screen.width > 1000) {
+		// PC 端
+		var script = document.createElement("script");
+		script.src = "/js/mychat.js";
+		document.body.appendChild(script);
+	} else {
+		// 移动端
+		if(localStorage.getItem('online_contact')) {
+			var script = document.createElement("script");
+			script.src = "/js/mychat.js";
+			document.body.appendChild(script);
+			
+			document.querySelector(".lrtoolbar").style.marginBottom = "95px";
+			document.querySelector(".lrtoolbar .lrtoolbar-contact").style.display = "none";
+		}
+	}
+})();

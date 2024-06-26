@@ -6,7 +6,7 @@
   <link href="https://www.traderpuma.com/atom.xml" rel="self"/>
   
   <link href="https://www.traderpuma.com/"/>
-  <updated>2024-06-10T04:22:47.696Z</updated>
+  <updated>2024-06-26T16:01:53.344Z</updated>
   <id>https://www.traderpuma.com/</id>
   
   <author>
@@ -20,15 +20,30 @@
     <title>比特币、以太坊的币本位和U本位合约计算器</title>
     <link href="https://www.traderpuma.com/%E7%A7%91%E7%A0%94%E6%8E%A2%E7%B4%A2/%E6%AF%94%E7%89%B9%E5%B8%81%E3%80%81%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84%E5%B8%81%E6%9C%AC%E4%BD%8D%E5%92%8CU%E6%9C%AC%E4%BD%8D%E5%90%88%E7%BA%A6%E8%AE%A1%E7%AE%97%E5%99%A8.html"/>
     <id>https://www.traderpuma.com/%E7%A7%91%E7%A0%94%E6%8E%A2%E7%B4%A2/%E6%AF%94%E7%89%B9%E5%B8%81%E3%80%81%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84%E5%B8%81%E6%9C%AC%E4%BD%8D%E5%92%8CU%E6%9C%AC%E4%BD%8D%E5%90%88%E7%BA%A6%E8%AE%A1%E7%AE%97%E5%99%A8.html</id>
-    <published>2024-06-10T04:12:14.000Z</published>
-    <updated>2024-06-10T04:22:47.696Z</updated>
+    <published>2024-06-16T04:12:14.000Z</published>
+    <updated>2024-06-26T16:01:53.344Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h2 id=&quot;页面跳转中…&quot;&gt;&lt;a href=&quot;#页面跳转中…&quot; class=&quot;headerlink&quot;</summary>
+    <summary type="html">&lt;script&gt;
+if (window.innerWidth &lt; 768) { 
+    window.location.replace = &#39;https://tools.traderpuma.com/#/counter/&#39;;
+}
+&lt;/script&gt;
+
+&lt;iframe src=&quot;https://tools.traderpuma.com/#/counter/&quot; class=&quot;myiframe&quot; title=&quot;合约计算器&quot; &gt;&lt;/iframe&gt;
+
+&lt;style&gt;
+.myiframe {
+    display: block;
+    width: 375px;
+    height: 700px;
+    border: 1px solid #eee;
+    margin:0 auto;
+    margin-top:</summary>
         
       
     
