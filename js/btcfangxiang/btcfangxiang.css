@@ -1,0 +1,22 @@
+#diretable {
+  margin-bottom: 20px;
+  border-collapse: collapse;
+  width: 100%;
+  text-align: center;
+}
+
+#diretable td, #diretable th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#diretable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background-color: #04AA6D;
+  color: white;
+}
+
+#diretable .info {
+	font-size: 13px;
+}

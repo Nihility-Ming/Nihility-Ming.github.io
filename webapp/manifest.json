@@ -1,0 +1,19 @@
+{
+    "name": "比特趋势大作手",
+    "short_name": "比特趋势大作手",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#fff",
+    "description": "一个专业的比特币中长线趋势交易者，分享比特币行情分析、交易技术、交易心得等",
+    "orientation": "portrait-primary",
+    "theme_color": "#b5d2df",
+    "icons": [{
+        "src": "/webapp/images/manifest-icon-192.maskable.png",
+        "sizes": "192x192",
+        "type": "image/png"
+    }, {
+        "src": "/webapp/images/manifest-icon-512.maskable.png",
+        "sizes": "512x512",
+        "type": "image/png"
+    }]
+}

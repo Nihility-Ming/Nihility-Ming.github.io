@@ -1,0 +1,89 @@
+.lrtoolbar {
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	margin-bottom: 20px;
+	width: 80px;
+	z-index: 555;
+}
+
+@media (pointer: fine) {
+	.lrtoolbar {
+		margin-bottom: 95px;
+	}
+}
+
+.lrtoolbar ul,.lrtoolbar ul li{
+	list-style-type: none;
+	padding:0;
+	margin:0;
+}
+
+.lrtoolbar ul li {
+	padding-top: 15px;
+}
+
+.lrtoolbar ul li a.badge:before {
+	content: "badge";
+	text-indent: -9999px;
+	float:right;
+	display:block;
+	width: 12px;
+	height: 12px;
+	background-color: red;
+	border-radius: 50%;
+	margin-top: 1px;
+	margin-right: 4px;
+}
+
+.lrtoolbar ul li a {
+	width: 60px;
+	height: 60px;
+	line-height:60px;
+	display:block;
+	background-color: rgb(87, 167, 115);
+	border-radius: 50%;
+	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+	text-indent: -9999px;
+	background-repeat:no-repeat;
+	background-position:center center;
+	background-size: 33px 33px;
+}
+
+.lrtoolbar ul li a:hover {
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 10px;
+}
+
+.lrtoolbar .lrtoolbar-top a{
+	background-image:url(top.png);
+}
+
+.lrtoolbar .lrtoolbar-news a{
+	background-image:url(news.png);
+}
+
+.lrtoolbar .lrtoolbar-appstore a{
+	background-image:url(appstore.png);
+}
+
+.lrtoolbar .lrtoolbar-appstore {
+	display: none;
+}
+
+.lrtoolbar .lrtoolbar-share a{
+	background-image:url(share.png);
+}
+
+.lrtoolbar .lrtoolbar-contribute a{
+	background-image:url(contribute.png);
+}
+
+@media (pointer: fine) {
+	.lrtoolbar .lrtoolbar-contact {
+		display: none;
+	}
+}
+
+.lrtoolbar .lrtoolbar-contact a{
+	background-image:url(contact.png);
+}

@@ -1,0 +1,18 @@
+.jianban {
+	font-size: 14px;
+}
+.jianbanbox {
+	padding: 5px 5px 5px 15px;
+	border-radius:10px;
+	box-shadow: inset 0px 0px 8px 0px rgba(0, 145, 255, 1);
+	margin-top: 15px;
+	margin-bottom: 15px;
+	background: url('/images/btc_bg01.png') no-repeat;
+	background-position: right center;
+	background-size: auto 90%;
+}
+@media (pointer: fine) {
+	.jianbanbox:hover {
+		box-shadow: inset 0px 0px 8px 0px rgba(255, 0, 0, 1);
+	}
+}

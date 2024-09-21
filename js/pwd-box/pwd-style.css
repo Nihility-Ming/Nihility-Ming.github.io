@@ -1,0 +1,50 @@
+.cnt123 {
+	display: none;
+}
+	
+#loginOverlay {
+	padding: 10px;
+    display: none;
+	text-align: center;
+	margin: 20px auto;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	border-radius: 5px;
+}
+
+#loginOverlay img.ttlogo {
+	width: 120px;
+	height: 120px;
+	min-width: auto;
+}
+
+#loginOverlay p, #loginOverlay input, #loginOverlay button {
+    margin: 10px;
+	font-size: 20px;
+}
+
+#loginOverlay p.tttips {
+	font-size: 18px;
+}
+
+#loginOverlay p.ttemail {
+	color: gray;
+	font-size: 14px
+}
+
+#loginOverlay p.ttemail a {
+	text-decoration:underline;
+}
+
+#loginOverlay p.ttemail a:hover {
+	color: red;
+}
+
+#loginOverlay input {
+	line-height: 30px;
+	height: 30px;
+	text-align: center;
+}
+
+#loginOverlay p {
+	color: black;
+}

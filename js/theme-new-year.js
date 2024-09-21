@@ -1,0 +1,1 @@
+!function(){const e=(new Date).getMonth();if(0===e||1===e||11===e){const e=document.createElement("link");e.href="/css/new-year.css",e.rel="stylesheet",document.body.appendChild(e)}else{const e=document.createElement("link");e.href="/css/default.css",e.rel="stylesheet",document.body.appendChild(e)}}();

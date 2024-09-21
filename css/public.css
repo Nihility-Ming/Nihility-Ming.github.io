@@ -1,0 +1,39 @@
+html, body {
+    padding: 0px;
+}
+h1 {
+    font-size: larger;
+}
+
+#main {
+    width: 100%;
+    height: 380px;
+    margin: auto;
+}
+
+
+table {
+    font-size: medium;
+    border-collapse: collapse;
+    border-color: #b8b8b8;
+    width: 100%;
+    text-align: center;
+    margin: auto;
+}
+
+table tr td:first-child {
+    width: 100px;
+}
+
+#reloadButton {
+    width: 100%;
+    height: 40px;
+    font-size: medium;
+}
+
+#copyright {
+    text-align: center;
+    margin-top: 30px;
+    padding-bottom: 10px;
+    font-size: small;
+}

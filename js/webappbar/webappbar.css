@@ -1,0 +1,25 @@
+.webappbar {
+	position: fixed;
+	z-index: 333;
+	top: 25px;
+	left:0;
+	right:0;
+	visibility: hidden;
+}
+
+.webappbar a {
+	display:block;
+	box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+	line-height:60px;
+	height: 60px;
+	width: 200px;
+	padding-left: 68px;
+	margin:auto;
+	border-radius: 10px;
+	background-color: white;
+	background-image: url(/images/install.png) ;
+	background-repeat: no-repeat;
+	background-size: 30px 30px;
+	background-position: 30px center;
+	color: #444;
+}
