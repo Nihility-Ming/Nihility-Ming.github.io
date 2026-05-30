@@ -383,33 +383,56 @@
         </div>
 
 
-        <!-- 评论功能 -->
-        <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
-        <div id="waline" style="margin-top:20px; background-color:white;border-radius: 10px;"></div>
-        <script type="module">
-            import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+        <div class="footer-note">
+            <!-- 评论功能 -->
+            <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+            <div id="waline"></div>
+            <script type="module">
+                import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
 
-            init({
-                el: '#waline',
-                reaction: true, // 开启反应
-                serverURL: 'https://comment.traderpuma.com',
-            });
-        </script>
-        <style>
-            .wl-header label,
-            .wl-header input {
-                font-size: 14px !important;
-                color: #333;
-            }
+                init({
+                    el: '#waline',
+                    reaction: true, // 开启反应
+                    serverURL: 'https://comment.traderpuma.com',
+                });
+            </script>
+            <style>
+                #waline {
+                    background-color: #fff;
+                }
 
-            .wl-editor {
-                padding: 10px;
-            }
+                .wl-header label,
+                .wl-header input {
+                    font-size: 14px !important;
+                    color: #333;
+                }
 
-            .wl-meta-foot {
-                display: none;
-            }
-        </style>
+                .wl-editor {
+                    padding: 10px;
+                }
+
+                .wl-action[title="Markdown Guide"],
+                .wl-text-number,
+                .wl-meta-foot {
+                    display: none;
+                }
+
+                .wl-btn {
+                    font-size: 14px;
+                    min-width: 40px;
+                }
+
+                .wl-header-item {
+                    align-items: center;
+                }
+
+                .wl-input {
+                    height: 20px;
+                    border-radius: 4px;
+                    border: 1px solid #ddd;
+                }
+            </style>
+        </div>
 
         <div class="footer-note">
             <img src="/images/qrcode.jpg" style="width:100%;display:block;" />
