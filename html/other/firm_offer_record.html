@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div class="table-container">
+        <table id="tradeTable">
+            <thead>
+                <tr>
+                    <th>时间</th>
+                    <th>币种</th>
+                    <th>操作</th>
+                    <th>价格</th>
+                    <th>价值</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+
+        <script>
+            const loadRecords = () => {
+                async function getHyperliquidFills(userAddress) {
+                    const url = 'https://api.hyperliquid.xyz/info';
+
+                    const payload = {
+                        type: "userFills",
+                        user: userAddress
+                    };
+
+                    try {
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+
+                        const data = await response.json();
+                        return data;
+                    } catch (error) {
+                        console.error("查询失败:", error);
+                    }
+                }
+
+                // 工具函数：毫秒时间戳转 MM-DD HH:mm:ss
+                function formatTime(ms) {
+                    const date = new Date(ms);
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                    const seconds = String(date.getSeconds()).padStart(2, '0');
+                    return `${month}-${day}<br/>${hours}:${minutes}:${seconds}`;
+                }
+
+                // 工具函数：操作转中文
+                function formatDir(dir) {
+                    const map = {
+                        "Open Short": "开空",
+                        "Open Long": "开多",
+                        "Close Short": "平空",
+                        "Close Long": "平多"
+                    };
+                    return map[dir] || dir;
+                }
+
+                // 工具函数：根据操作返回对应颜色
+                function getDirColor(dir) {
+                    const colorMap = {
+                        "Open Short": "red",      // 开空
+                        "Open Long": "green",     // 开多
+                        "Close Short": '#df00f3',  // 平空
+                        "Close Long": "#005eff"      // 平多
+                    };
+                    return colorMap[dir] || "black"; // 未知操作默认黑色
+                }
+
+                // 渲染表格
+                function renderTable(dataList) {
+                    const tableBody = document.getElementById('tableBody');
+                    tableBody.innerHTML = '';
+
+                    dataList.forEach(item => {
+                        const tr = document.createElement('tr');
+
+                        // 1. 时间
+                        const timeTd = document.createElement('td');
+                        timeTd.innerHTML = formatTime(item.time);
+                        tr.appendChild(timeTd);
+
+                        // 2. 币种
+                        const coinTd = document.createElement('td');
+                        coinTd.innerText = item.coin;
+                        tr.appendChild(coinTd);
+
+                        // 3. 操作（带颜色）
+                        const opTd = document.createElement('td');
+                        opTd.innerText = formatDir(item.dir);
+                        opTd.style.color = getDirColor(item.dir);
+                        tr.appendChild(opTd);
+
+                        // 4. 价格
+                        const priceTd = document.createElement('td');
+                        priceTd.innerText = `$${parseInt(item.px)}`;
+                        tr.appendChild(priceTd);
+
+                        // 5. 价值
+                        const value = (Math.abs(parseFloat(item.sz)) * parseFloat(item.px)).toFixed(2);
+                        const valueTd = document.createElement('td');
+                        valueTd.innerHTML = `$${value}<br />¥${(value * 6.8).toFixed(2)}`;
+                        tr.appendChild(valueTd);
+
+                        tableBody.appendChild(tr);
+                    });
+                }
+
+                const execute = async () => {
+                    const data = await getHyperliquidFills("0x7a9a579100b0ee52560b4dcf1c8d43a7a0c641d6");
+                    renderTable(data);
+                };
+
+                execute();
+            };
+
+            loadRecords();
+
+            // 每分钟刷新一次
+            setInterval(loadRecords, 60000);
+        </script>
+    </div>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .table-container {
+            font-size: 0.8em;
+        }
+
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+        }
+
+        table th,
+        table td {
+            text-align: center;
+            padding: 10px;
+        }
+
+        table th {
+            color: white;
+            background-color: rgb(87, 167, 115);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</body>
+
+</html>
