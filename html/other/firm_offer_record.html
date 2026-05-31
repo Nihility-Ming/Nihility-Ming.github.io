@@ -5,6 +5,69 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>交易记录</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            font-size: 0.8em;
+            position: relative;
+        }
+
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .table-container {
+                overflow-x: scroll;
+            }
+
+            table {
+                min-width: 420px;
+            }
+
+        }
+
+        table th,
+        table td {
+            text-align: center;
+            padding: 10px;
+        }
+
+        table th {
+            color: white;
+            background-color: rgb(87, 167, 115);
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .title {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            text-align: center;
+            color: white;
+            font-size: 0.8em;
+            line-height: 2.2em;
+            background-color: rgb(68, 129, 89);
+            margin: 0 auto;
+            max-width: 800px;
+        }
+    </style>
 </head>
 
 <body>
@@ -146,57 +209,7 @@
         </script>
     </div>
 
-    <style>
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-        }
 
-        .table-container {
-            font-size: 0.8em;
-        }
-
-
-        table {
-            border-collapse: collapse;
-            border-spacing: 0;
-            width: 100%;
-            max-width: 800px;
-            margin: auto auto;
-        }
-
-        table th,
-        table td {
-            text-align: center;
-            padding: 10px;
-        }
-
-        table th {
-            color: white;
-            background-color: rgb(87, 167, 115);
-            position: sticky;
-            top: 2.2em;
-            z-index: 10;
-        }
-
-        table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        .title {
-
-            max-width: 800px;
-            position: sticky;
-            top: 0;
-            text-align: center;
-            color: white;
-            font-size: 0.8em;
-            line-height: 2.2em;
-            background-color: rgb(68, 129, 89);
-            margin: 0 auto;
-        }
-    </style>
 </body>
 
 </html>
