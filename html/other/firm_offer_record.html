@@ -14,8 +14,9 @@
         }
 
         .table-container {
-            overflow-x: auto;
+            overflow: auto;
             font-size: 0.8em;
+            height: 100vh;
         }
 
 
@@ -44,6 +45,9 @@
         table th {
             color: white;
             background-color: rgb(87, 167, 115);
+            position: sticky;
+            top: 0;
+            z-index: 20;
         }
 
         table tr:nth-child(even) {
@@ -51,24 +55,21 @@
         }
 
         .title {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            text-align: center;
+            text-indent: 16px;
+            text-align: left;
             color: white;
-            font-size: 0.8em;
-            line-height: 2.2em;
+            font-size: 12px;
+            line-height: 30px;
+            height: 30px;
             background-color: rgb(68, 129, 89);
-            margin: 0 auto;
-            max-width: 800px;
         }
     </style>
 </head>
 
 <body>
-    <p class="title">最近交易记录<span id="wtnum"></span></p>
     <div class="table-container">
         <table id="tradeTable">
+            <caption class="title">最近交易记录</caption>
             <thead>
                 <tr>
                     <th>时间</th>
@@ -199,7 +200,7 @@
 
             loadRecords();
 
-            // 每分钟刷新一次
+            // 每60s刷新一次
             setInterval(loadRecords, 60000);
         </script>
     </div>

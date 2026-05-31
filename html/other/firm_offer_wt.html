@@ -57,20 +57,21 @@
         }
 
         .title {
-            text-align: center;
+            text-indent: 16px;
+            text-align: left;
             color: white;
-            font-size: 0.8em;
-            line-height: 2.2em;
+            font-size: 12px;
+            line-height: 30px;
+            height: 30px;
             background-color: rgb(68, 129, 89);
-            margin: 0;
         }
     </style>
 </head>
 
 <body>
-    <p class="title">当前委托<span id="wtnum"></span></p>
     <div class="table-container">
         <table id="orderTable">
+            <caption class="title">当前委托<span id="wtnum"></span></caption>
             <thead>
                 <tr>
                     <th>时间</th>
@@ -118,7 +119,7 @@
 
         // 极简渲染函数（仅做必要的格式化）
         function renderOrders(dataList) {
-            document.getElementById("wtnum").innerHTML = `（${dataList.length}）`;
+            document.getElementById("wtnum").innerHTML = ` (${dataList.length})`;
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
 
@@ -173,6 +174,9 @@
 
         // 调用示例
         execute();
+
+        // 每60s刷新一次
+        setInterval(execute, 60000);
     </script>
 </body>
 
