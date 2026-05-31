@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>当前委托</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-y: hidden;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            font-size: 0.8em;
+        }
+
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+            max-width: 800px;
+            margin: auto auto;
+        }
+
+        @media (max-width: 768px) {
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 520px;
+            }
+
+        }
+
+        table th,
+        table td {
+            text-align: center;
+            padding: 10px;
+        }
+
+        table th {
+            color: white;
+            background-color: rgb(87, 167, 115);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 0.8em;
+            line-height: 2.2em;
+            background-color: rgb(68, 129, 89);
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <p class="title">当前委托<span id="wtnum"></span></p>
+    <div class="table-container">
+        <table id="orderTable">
+            <thead>
+                <tr>
+                    <th>时间</th>
+                    <th>币种</th>
+                    <th>操作</th>
+                    <th>方向</th>
+                    <th>触发价格</th>
+                    <th>数量</th>
+                    <th>价格</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+
+    <script>
+        async function getOpenOrders(userAddress) {
+            const url = 'https://api.hyperliquid.xyz/info';
+
+            const payload = {
+                type: "frontendOpenOrders",
+                user: userAddress
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const orders = await response.json();
+                return orders;
+            } catch (error) {
+                console.error("获取当前委托失败:", error);
+            }
+        }
+
+        // 极简渲染函数（仅做必要的格式化）
+        function renderOrders(dataList) {
+            document.getElementById("wtnum").innerHTML = `（${dataList.length}）`;
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            dataList.forEach(item => {
+                const tr = document.createElement('tr');
+
+                // 1. 时间戳转成截图格式：YYYY-MM-DD HH:mm
+                const date = new Date(item.timestamp);
+                const time = `${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+
+                // 2. 订单类型转中文（和截图保持一致）
+                const opMap = {
+                    "Take Profit Market": "市价止盈",
+                    "Take Profit Limit": "限价止盈",
+                    "Stop Market": "市价止损",
+                    "Stop Limit": "限价止损"
+                };
+                const op = opMap[item.orderType] || item.orderType;
+
+                // 3. 方向转中文（B=买入，A=卖出）
+                const direction = item.side === 'B' ? '买入' : '卖出';
+
+                // 4. 价格加 $ 符号，和截图格式统一
+                const price = `$${item.limitPx}`;
+                const triggerPrice = `$${item.triggerPx}`;
+
+                // 按表头顺序填充单元格
+                const cells = [
+                    time,
+                    item.coin,
+                    op,
+                    direction,
+                    triggerPrice,
+                    item.sz,
+                    price,
+                ];
+
+                cells.forEach(text => {
+                    const td = document.createElement('td');
+                    td.innerHTML = text;
+                    tr.appendChild(td);
+                });
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        const execute = async () => {
+            const orderData = await getOpenOrders("0x7a9a579100b0ee52560b4dcf1c8d43a7a0c641d6");
+            renderOrders(orderData);
+        }
+
+        // 调用示例
+        execute();
+    </script>
+</body>
+
+</html>

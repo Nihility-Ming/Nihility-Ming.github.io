@@ -4,9 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交易记录</title>
 </head>
 
 <body>
+    <p class="title">最近交易记录<span id="wtnum"></span></p>
     <div class="table-container">
         <table id="tradeTable">
             <thead>
@@ -168,12 +170,25 @@
             color: white;
             background-color: rgb(87, 167, 115);
             position: sticky;
-            top: 0;
+            top: 2.2em;
             z-index: 10;
         }
 
         table tr:nth-child(even) {
             background-color: #f2f2f2;
+        }
+
+        .title {
+
+            max-width: 800px;
+            position: sticky;
+            top: 0;
+            text-align: center;
+            color: white;
+            font-size: 0.8em;
+            line-height: 2.2em;
+            background-color: rgb(68, 129, 89);
+            margin: 0 auto;
         }
     </style>
 </body>
