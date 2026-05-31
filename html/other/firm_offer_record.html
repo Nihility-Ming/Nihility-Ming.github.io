@@ -18,6 +18,7 @@
                     <th>操作</th>
                     <th>价格</th>
                     <th>价值</th>
+                    <th>盈亏</th>
                 </tr>
             </thead>
             <tbody id="tableBody"></tbody>
@@ -120,6 +121,11 @@
                         const valueTd = document.createElement('td');
                         valueTd.innerHTML = `$${value}<br />¥${(value * 6.8).toFixed(2)}`;
                         tr.appendChild(valueTd);
+
+                        // 6. 盈亏
+                        const closedPnl = document.createElement('td');
+                        closedPnl.innerText = `$${parseFloat(item.closedPnl).toFixed(2)}`;
+                        tr.appendChild(closedPnl);
 
                         tableBody.appendChild(tr);
                     });
