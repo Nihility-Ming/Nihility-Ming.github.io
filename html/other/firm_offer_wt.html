@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>当前委托</title>
+    <script src="/js/const.js"></script>
     <style>
         html,
         body {
@@ -168,7 +169,7 @@
         }
 
         const execute = async () => {
-            const orderData = await getOpenOrders("0x7a9a579100b0ee52560b4dcf1c8d43a7a0c641d6");
+            const orderData = await getOpenOrders(MyHyperliquidAddress);
             renderOrders(orderData);
         }
 

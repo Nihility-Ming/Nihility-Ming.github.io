@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>交易记录</title>
+    <script src="/js/const.js"></script>
     <style>
         html,
         body {
@@ -191,7 +192,7 @@
                 }
 
                 const execute = async () => {
-                    const data = await getHyperliquidFills("0x7a9a579100b0ee52560b4dcf1c8d43a7a0c641d6");
+                    const data = await getHyperliquidFills(MyHyperliquidAddress);
                     renderTable(data);
                 };
 
