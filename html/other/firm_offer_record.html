@@ -87,7 +87,7 @@
         <script>
             const loadRecords = () => {
                 async function getHyperliquidFills(userAddress) {
-                    const url = 'https://daili.traderpuma.com/api.hyperliquid.xyz/info';
+                    const url = 'https://api.hyperliquid.xyz/info';
 
                     const payload = {
                         type: "userFills",
@@ -201,8 +201,6 @@
 
             loadRecords();
 
-            // 每60s刷新一次
-            setInterval(loadRecords, 60000);
         </script>
     </div>
 
