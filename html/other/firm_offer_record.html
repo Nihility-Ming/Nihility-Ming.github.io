@@ -148,9 +148,11 @@
                 }
 
                 // 渲染表格
-                function renderTable(dataList) {
+                async function renderTable(dataList) {
                     const tableBody = document.getElementById('tableBody');
                     tableBody.innerHTML = '';
+
+                    await USD_TO_CNY();
 
                     dataList.forEach(item => {
                         const tr = document.createElement('tr');
@@ -179,7 +181,7 @@
                         // 5. 价值
                         const value = (Math.abs(parseFloat(item.sz)) * parseFloat(item.px)).toFixed(2);
                         const valueTd = document.createElement('td');
-                        valueTd.innerHTML = `$${value}<br />¥${(value * 6.8).toFixed(2)}`;
+                        valueTd.innerHTML = `$${value}<br />¥${(value * TheRateValue).toFixed(2)}`;
                         tr.appendChild(valueTd);
 
                         // 6. 盈亏
@@ -193,7 +195,7 @@
 
                 const execute = async () => {
                     const data = await getHyperliquidFills(MyHyperliquidAddress);
-                    renderTable(data);
+                    await renderTable(data);
                 };
 
                 execute();
