@@ -88,6 +88,8 @@
         </table>
     </div>
 
+    <div id="empty"></div>
+
 
     <script>
         async function getOpenOrders(userAddress) {
@@ -170,7 +172,12 @@
 
         const execute = async () => {
             const orderData = await getOpenOrders(MyHyperliquidAddress);
-            renderOrders(orderData);
+            if (orderData.length === 0) {
+                document.getElementById('empty').innerHTML = '<p style="text-align:center;font-size:14px;color:gray;">当前没有任何委托订单</p>';
+            } else {
+                renderOrders(orderData);
+            }
+
         }
 
         // 调用示例

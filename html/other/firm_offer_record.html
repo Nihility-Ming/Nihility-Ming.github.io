@@ -68,6 +68,7 @@
 </head>
 
 <body>
+
     <div class="table-container">
         <table id="tradeTable">
             <caption class="title">最近交易记录</caption>
@@ -81,132 +82,144 @@
                     <th>盈亏</th>
                 </tr>
             </thead>
-            <tbody id="tableBody"></tbody>
+            <tbody id="tableBody">
+                <tr id="empty">
+                    <td colspan="6">
+                        <p style="text-align: center;">当前没有任何交易记录</p>
+                    </td>
+                </tr>
+            </tbody>
         </table>
-
-        <script>
-            const loadRecords = () => {
-                async function getHyperliquidFills(userAddress) {
-                    const url = 'https://api.hyperliquid.xyz/info';
-
-                    const payload = {
-                        type: "userFills",
-                        user: userAddress
-                    };
-
-                    try {
-                        const response = await fetch(url, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(payload)
-                        });
-
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-
-                        const data = await response.json();
-                        return data;
-                    } catch (error) {
-                        console.error("查询失败:", error);
-                    }
-                }
-
-                // 工具函数：毫秒时间戳转 MM-DD HH:mm:ss
-                function formatTime(ms) {
-                    const date = new Date(ms);
-                    const month = String(date.getMonth() + 1).padStart(2, '0');
-                    const day = String(date.getDate()).padStart(2, '0');
-                    const hours = String(date.getHours()).padStart(2, '0');
-                    const minutes = String(date.getMinutes()).padStart(2, '0');
-                    const seconds = String(date.getSeconds()).padStart(2, '0');
-                    return `${month}-${day}<br/>${hours}:${minutes}:${seconds}`;
-                }
-
-                // 工具函数：操作转中文
-                function formatDir(dir) {
-                    const map = {
-                        "Open Short": "开空",
-                        "Open Long": "开多",
-                        "Close Short": "平空",
-                        "Close Long": "平多"
-                    };
-                    return map[dir] || dir;
-                }
-
-                // 工具函数：根据操作返回对应颜色
-                function getDirColor(dir) {
-                    const colorMap = {
-                        "Open Short": "red",      // 开空
-                        "Open Long": "green",     // 开多
-                        "Close Short": '#df00f3',  // 平空
-                        "Close Long": "#005eff"      // 平多
-                    };
-                    return colorMap[dir] || "black"; // 未知操作默认黑色
-                }
-
-                // 渲染表格
-                async function renderTable(dataList) {
-                    const tableBody = document.getElementById('tableBody');
-                    tableBody.innerHTML = '';
-
-                    await USD_TO_CNY();
-
-                    dataList.forEach(item => {
-                        const tr = document.createElement('tr');
-
-                        // 1. 时间
-                        const timeTd = document.createElement('td');
-                        timeTd.innerHTML = formatTime(item.time);
-                        tr.appendChild(timeTd);
-
-                        // 2. 币种
-                        const coinTd = document.createElement('td');
-                        coinTd.innerText = item.coin;
-                        tr.appendChild(coinTd);
-
-                        // 3. 操作（带颜色）
-                        const opTd = document.createElement('td');
-                        opTd.innerText = formatDir(item.dir);
-                        opTd.style.color = getDirColor(item.dir);
-                        tr.appendChild(opTd);
-
-                        // 4. 价格
-                        const priceTd = document.createElement('td');
-                        priceTd.innerText = `$${parseInt(item.px)}`;
-                        tr.appendChild(priceTd);
-
-                        // 5. 价值
-                        const value = (Math.abs(parseFloat(item.sz)) * parseFloat(item.px)).toFixed(2);
-                        const valueTd = document.createElement('td');
-                        valueTd.innerHTML = `$${value}<br />¥${(value * TheRateValue).toFixed(2)}`;
-                        tr.appendChild(valueTd);
-
-                        // 6. 盈亏
-                        const closedPnl = document.createElement('td');
-                        closedPnl.innerText = `$${parseFloat(item.closedPnl).toFixed(2)}`;
-                        tr.appendChild(closedPnl);
-
-                        tableBody.appendChild(tr);
-                    });
-                }
-
-                const execute = async () => {
-                    const data = await getHyperliquidFills(MyHyperliquidAddress);
-                    await renderTable(data);
-                };
-
-                execute();
-            };
-
-            loadRecords();
-
-        </script>
     </div>
 
 
+
+    <script>
+        const loadRecords = () => {
+            async function getHyperliquidFills(userAddress) {
+                const url = 'https://api.hyperliquid.xyz/info';
+
+                const payload = {
+                    type: "userFills",
+                    user: userAddress
+                };
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    return data;
+                } catch (error) {
+                    console.error("查询失败:", error);
+                }
+            }
+
+            // 工具函数：毫秒时间戳转 MM-DD HH:mm:ss
+            function formatTime(ms) {
+                const date = new Date(ms);
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                const seconds = String(date.getSeconds()).padStart(2, '0');
+                return `${month}-${day}<br/>${hours}:${minutes}:${seconds}`;
+            }
+
+            // 工具函数：操作转中文
+            function formatDir(dir) {
+                const map = {
+                    "Open Short": "开空",
+                    "Open Long": "开多",
+                    "Close Short": "平空",
+                    "Close Long": "平多"
+                };
+                return map[dir] || dir;
+            }
+
+            // 工具函数：根据操作返回对应颜色
+            function getDirColor(dir) {
+                const colorMap = {
+                    "Open Short": "red",      // 开空
+                    "Open Long": "green",     // 开多
+                    "Close Short": '#df00f3',  // 平空
+                    "Close Long": "#005eff"      // 平多
+                };
+                return colorMap[dir] || "black"; // 未知操作默认黑色
+            }
+
+            // 渲染表格
+            async function renderTable(dataList) {
+                const tableBody = document.getElementById('tableBody');
+                tableBody.innerHTML = '';
+
+                await USD_TO_CNY();
+
+                dataList.forEach(item => {
+                    const tr = document.createElement('tr');
+
+                    // 1. 时间
+                    const timeTd = document.createElement('td');
+                    timeTd.innerHTML = formatTime(item.time);
+                    tr.appendChild(timeTd);
+
+                    // 2. 币种
+                    const coinTd = document.createElement('td');
+                    coinTd.innerText = item.coin;
+                    tr.appendChild(coinTd);
+
+                    // 3. 操作（带颜色）
+                    const opTd = document.createElement('td');
+                    opTd.innerText = formatDir(item.dir);
+                    opTd.style.color = getDirColor(item.dir);
+                    tr.appendChild(opTd);
+
+                    // 4. 价格
+                    const priceTd = document.createElement('td');
+                    priceTd.innerText = `$${parseInt(item.px)}`;
+                    tr.appendChild(priceTd);
+
+                    // 5. 价值
+                    const value = (Math.abs(parseFloat(item.sz)) * parseFloat(item.px)).toFixed(2);
+                    const valueTd = document.createElement('td');
+                    valueTd.innerHTML = `$${value}<br />¥${(value * TheRateValue).toFixed(2)}`;
+                    tr.appendChild(valueTd);
+
+                    // 6. 盈亏
+                    const closedPnl = document.createElement('td');
+                    closedPnl.innerText = `$${parseFloat(item.closedPnl).toFixed(2)}`;
+                    tr.appendChild(closedPnl);
+
+                    tableBody.appendChild(tr);
+                });
+            }
+
+            const execute = async () => {
+                const orderData = await getHyperliquidFills(MyHyperliquidAddress);
+
+                if (orderData.length === 0) {
+                    document.getElementById('empty').style.display = 'block';
+                } else {
+                    document.getElementById('empty').style.display = 'none';
+                    await renderTable(orderData);
+                }
+            };
+
+            execute();
+        };
+
+        loadRecords();
+
+    </script>
 </body>
 
 </html>
