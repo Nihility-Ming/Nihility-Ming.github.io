@@ -146,8 +146,8 @@
                 const direction = item.side === 'B' ? '买入' : '卖出';
 
                 // 4. 价格加 $ 符号，和截图格式统一
-                const price = `$${item.limitPx}`;
-                const triggerPrice = `$${item.triggerPx}`;
+                const price = `$${formatNumber(item.limitPx)}`;
+                const triggerPrice = `$${formatNumber(item.triggerPx)}`;
 
                 // 按表头顺序填充单元格
                 const cells = [

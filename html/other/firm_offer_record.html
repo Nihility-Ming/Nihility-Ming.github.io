@@ -185,18 +185,18 @@
 
                     // 4. 价格
                     const priceTd = document.createElement('td');
-                    priceTd.innerText = `$${parseInt(item.px)}`;
+                    priceTd.innerText = `$${formatNumber(parseInt(item.px))}`;
                     tr.appendChild(priceTd);
 
                     // 5. 价值
-                    const value = (Math.abs(parseFloat(item.sz)) * parseFloat(item.px)).toFixed(2);
+                    const value = Math.abs(parseFloat(item.sz)) * parseFloat(item.px);
                     const valueTd = document.createElement('td');
-                    valueTd.innerHTML = `$${value}<br />¥${(value * TheRateValue).toFixed(2)}`;
+                    valueTd.innerHTML = `$${formatNumber(value)}<br />¥${formatNumber(value * TheRateValue)}`;
                     tr.appendChild(valueTd);
 
                     // 6. 盈亏
                     const closedPnl = document.createElement('td');
-                    closedPnl.innerText = `$${parseFloat(item.closedPnl).toFixed(2)}`;
+                    closedPnl.innerText = `$${formatNumber(parseFloat(item.closedPnl))}`;
                     tr.appendChild(closedPnl);
 
                     tableBody.appendChild(tr);
