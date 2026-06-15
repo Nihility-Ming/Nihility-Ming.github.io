@@ -34,7 +34,7 @@
             }
 
             table {
-                min-width: 520px;
+                min-width: 500px;
             }
 
         }
@@ -80,8 +80,7 @@
                     <th>操作</th>
                     <th>方向</th>
                     <th>触发价格</th>
-                    <th>数量</th>
-                    <th>价格</th>
+                    <th>价值</th>
                 </tr>
             </thead>
             <tbody id="tableBody"></tbody>
@@ -101,6 +100,7 @@
             };
 
             try {
+                await USD_TO_CNY();
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: {
@@ -133,31 +133,44 @@
                 const date = new Date(item.timestamp);
                 const time = `${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 
-                // 2. 订单类型转中文（和截图保持一致）
+                // 2. 动态判断“操作”类型（精准支持 8 种值）
+                let op = "";
                 const opMap = {
                     "Take Profit Market": "市价止盈",
                     "Take Profit Limit": "限价止盈",
                     "Stop Market": "市价止损",
                     "Stop Limit": "限价止损"
                 };
-                const op = opMap[item.orderType] || item.orderType;
+
+                // 判断逻辑：只有当 isPositionTpsl 为 true 时，才走纯正的持仓止盈止损映射
+                if (item.isPositionTpsl && opMap[item.orderType]) {
+                    op = opMap[item.orderType];
+                } else {
+                    // 否则属于普通的开仓/方向单：
+                    // 只要 orderType 字符串里包含 "Market"（比如 "Market" 或 "Take Profit Market"），就认定为市价
+                    const isMarket = item.orderType && item.orderType.includes("Market");
+                    const typeStr = isMarket ? "市价" : "限价";
+                    const sideStr = item.side === 'B' ? "做多" : "做空";
+
+                    op = typeStr + sideStr; // 组合成：市价做多 / 市价做空 / 限价做多 / 限价做空
+                }
 
                 // 3. 方向转中文（B=买入，A=卖出）
                 const direction = item.side === 'B' ? '买入' : '卖出';
 
                 // 4. 价格加 $ 符号，和截图格式统一
-                const price = `$${formatNumber(item.limitPx)}`;
-                const triggerPrice = `$${formatNumber(item.triggerPx)}`;
+                const price = `$${item.limitPx}`;
+                const triggerPrice = item.triggerPx ? `$${item.triggerPx}` : '-';
 
                 // 按表头顺序填充单元格
                 const cells = [
                     time,
                     item.coin,
-                    op,
+                    op,          // 此时第二行会精准显示为 "市价做空"
                     direction,
-                    triggerPrice,
-                    item.sz,
-                    price,
+                    '$' + formatNumber(Number(item.triggerPx)),
+                    (item.sz === '0.0' ? '所有仓位' : '$' + formatNumber(item.sz * item.triggerPx)) +
+                    (item.sz === '0.0' ? '' : ('<br/>¥' + formatNumber(item.sz * item.triggerPx * TheRateValue))),
                 ];
 
                 cells.forEach(text => {
@@ -171,18 +184,17 @@
         }
 
         const execute = async () => {
+            // 请确保全局或上方已定义 MyHyperliquidAddress
             const orderData = await getOpenOrders(MyHyperliquidAddress);
-            if (orderData.length === 0) {
+            if (!orderData || orderData.length === 0) {
                 document.getElementById('empty').innerHTML = '<p style="text-align:center;font-size:14px;color:gray;">当前没有任何委托订单</p>';
             } else {
                 renderOrders(orderData);
             }
-
         }
 
         // 调用示例
         execute();
-
     </script>
 </body>
 
