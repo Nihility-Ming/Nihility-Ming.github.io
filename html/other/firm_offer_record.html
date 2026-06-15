@@ -196,7 +196,15 @@
 
                     // 6. 盈亏
                     const closedPnl = document.createElement('td');
-                    closedPnl.innerText = `$${formatNumber(parseFloat(item.closedPnl))}`;
+
+                    if (Number(item.closedPnl) > 0) {
+                        closedPnl.innerHTML = `<span style="color:green">+$${formatNumber(Number(item.closedPnl))}<br />+¥${formatNumber(Number(item.closedPnl * TheRateValue))}</span>`;
+                    } else if (Number(item.closedPnl) < 0) {
+                        closedPnl.innerHTML = `<span style="color:red">-$${formatNumber(Math.abs(Number(item.closedPnl)))}<br />-¥${formatNumber(Math.abs(Number(item.closedPnl * TheRateValue)))}</span>`;
+                    } else {
+                        closedPnl.innerHTML = `-`;
+                    }
+
                     tr.appendChild(closedPnl);
 
                     tableBody.appendChild(tr);
