@@ -6,7 +6,7 @@
   <link href="https://www.traderpuma.com/atom.xml" rel="self"/>
   
   <link href="https://www.traderpuma.com/"/>
-  <updated>2026-06-05T05:35:18.095Z</updated>
+  <updated>2026-06-24T12:12:13.471Z</updated>
   <id>https://www.traderpuma.com/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>天道轮回操盘术：根据周期买卖期权</title>
+    <link href="https://www.traderpuma.com/%E4%BA%A4%E6%98%93%E5%BF%83%E5%BE%97/%E5%A4%A9%E9%81%93%E8%BD%AE%E5%9B%9E%E6%93%8D%E7%9B%98%E6%9C%AF%EF%BC%9A%E6%A0%B9%E6%8D%AE%E5%91%A8%E6%9C%9F%E4%B9%B0%E5%8D%96%E6%9C%9F%E6%9D%83.html"/>
+    <id>https://www.traderpuma.com/%E4%BA%A4%E6%98%93%E5%BF%83%E5%BE%97/%E5%A4%A9%E9%81%93%E8%BD%AE%E5%9B%9E%E6%93%8D%E7%9B%98%E6%9C%AF%EF%BC%9A%E6%A0%B9%E6%8D%AE%E5%91%A8%E6%9C%9F%E4%B9%B0%E5%8D%96%E6%9C%9F%E6%9D%83.html</id>
+    <published>2026-06-24T12:12:26.000Z</published>
+    <updated>2026-06-24T12:12:13.471Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;img data-src=&quot;/btc-pictures/upload/144.jpg&quot;  /&gt;
+
+&lt;p&gt;在期权的世界里，散户总想用小钱买明天到期的期权一夜暴富，结果全给交易所送钱。而我们要利用 &lt;strong&gt;“4年减半骨架 + 宏观流动性钟摆”&lt;/strong&gt;，在不同的阶段利用期权非线性的数学优势，对市场进行降维打击。&lt;/p&gt;
+&lt;p&gt;以下是根据市场周期量身定制的&lt;strong&gt;期权周期买卖指南&lt;/strong&gt;：&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;牛市三阶段：从“赚取泡沫”到“锁定非对称”&quot;&gt;&lt;a href=&quot;#牛市三阶段：从“赚取泡沫”到“锁定非对称”&quot; class=&quot;headerlink&quot; title=&quot;牛市三阶段：从“赚取泡沫”到“锁定非对称”&quot;&gt;&lt;/a&gt;牛市三阶段：从“赚取泡沫”到“锁定非对称”&lt;/h2&gt;&lt;h3 id=&quot;1-牛市初期（筑底完成，右侧确立）&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="交易心得" scheme="https://www.traderpuma.com/categories/%E4%BA%A4%E6%98%93%E5%BF%83%E5%BE%97/"/>
+    
+    
+    <category term="交易心得" scheme="https://www.traderpuma.com/tags/%E4%BA%A4%E6%98%93%E5%BF%83%E5%BE%97/"/>
+    
+  </entry>
   
   <entry>
     <title>2026-05-28 比特币行情分析：宏观指标观察</title>
@@ -2830,38 +2860,6 @@ table td[colspan=&quot;2&quot;] {
     &lt;/tr&gt;
     &lt;tr&gt;
        </summary>
-        
-      
-    
-    
-    
-    <category term="科研探索" scheme="https://www.traderpuma.com/categories/%E7%A7%91%E7%A0%94%E6%8E%A2%E7%B4%A2/"/>
-    
-    
-    <category term="科研探索" scheme="https://www.traderpuma.com/tags/%E7%A7%91%E7%A0%94%E6%8E%A2%E7%B4%A2/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>检查本机的国内外IP地址和网站连通性</title>
-    <link href="https://www.traderpuma.com/%E7%A7%91%E7%A0%94%E6%8E%A2%E7%B4%A2/IP%E5%9C%B0%E5%9D%80%E5%92%8C%E5%9B%BD%E5%86%85%E5%A4%96%E7%BD%91%E7%AB%99%E8%BF%9E%E9%80%9A%E6%80%A7%E6%A3%80%E6%9F%A5.html"/>
-    <id>https://www.traderpuma.com/%E7%A7%91%E7%A0%94%E6%8E%A2%E7%B4%A2/IP%E5%9C%B0%E5%9D%80%E5%92%8C%E5%9B%BD%E5%86%85%E5%A4%96%E7%BD%91%E7%AB%99%E8%BF%9E%E9%80%9A%E6%80%A7%E6%A3%80%E6%9F%A5.html</id>
-    <published>2023-09-20T11:43:53.000Z</published>
-    <updated>2024-11-27T16:22:41.323Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;div id=&quot;myHtmlDiv&quot; style=&quot;margin-top: 20px;color: red;&quot;&gt;Loading...&lt;/div&gt;
-
-&lt;p&gt;在国内访问国外网站时，由于网络结构和政策的限制，可能会出现连通性问题。&lt;/p&gt;
-&lt;p&gt;我们可以使用本页面来进行连通性检查，以帮助我们确定国内设备与国外网站之间的连通性情况。&lt;/p&gt;
-&lt;script&gt;
-window.onload=function(){
-    setTimeout(function(){
-        myHtmlDiv.innerHTML = &#39;&lt;iframe src=&quot;https://ip.skk.moe/simple&quot; scrolling=&quot;no&quot; style=&quot;width: 100%; border: 0;height: 208px; overflow: hidden;&quot;</summary>
         
       
     
