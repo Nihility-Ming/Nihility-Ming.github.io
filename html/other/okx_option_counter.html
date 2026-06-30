@@ -13,62 +13,65 @@
     <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">OKX 币本位期权计算器</h1>
     
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- 左侧：参数输入区 -->
       <div class="space-y-4">
-        <!-- 基础参数 -->
         <div class="bg-white rounded-xl shadow-sm p-5">
           <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">基础参数</h2>
           <div class="space-y-3">
             <div class="flex items-center gap-4">
-              <label class="w-24 text-gray-600">期权类型</label>
-              <select v-model="form.type" class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                <option value="call">看涨期权 (Call)</option>
-				<option value="put">看跌期权 (Put)</option>
+              <label class="w-24 text-gray-600">标的资产</label>
+              <select v-model="form.coin" class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <option value="BTC">Bitcoin (BTC)</option>
+                <option value="ETH">Ethereum (ETH)</option>
               </select>
-            </div>
-			
-			<div class="flex items-center gap-4">
-              <label class="w-24 text-gray-600">行权价 (USD)</label>
-              <input v-model.number="form.strike" type="number" class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
-			
-            <div class="flex items-center gap-4">
-              <label class="w-24 text-gray-600">持仓张数</label>
-              <input v-model.number="form.contracts" type="number" class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
 
             <div class="flex items-center gap-4">
-              <label class="w-24 text-gray-600">开仓均价 (BTC)</label>
-              <input v-model.number="form.entryPrice" step="0.0001" type="number" class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <label class="w-24 text-gray-600">期权类型</label>
+              <select v-model="form.type" class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <option value="call">看涨期权 (Call)</option>
+                <option value="put">看跌期权 (Put)</option>
+              </select>
+            </div>
+            
+            <div class="flex items-center gap-4">
+              <label class="w-24 text-gray-600">行权价 (USD)</label>
+              <input v-model.number="form.strike" type="number" inputmode="decimal" class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+            
+            <div class="flex items-center gap-4">
+              <label class="w-24 text-gray-600">持仓张数</label>
+              <input v-model.number="form.contracts" type="number" inputmode="decimal" class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+
+            <div class="flex items-center gap-4">
+              <label class="w-24 text-gray-600">开仓均价 ({{ form.coin }})</label>
+              <input v-model.number="form.entryPrice" step="0.0001" type="number" inputmode="decimal" class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
           </div>
         </div>
 
-        <!-- 目标价输入 -->
         <div class="bg-white rounded-xl shadow-sm p-5">
           <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">到期目标价</h2>
           <div class="space-y-3">
             <div class="flex items-center gap-4">
               <label class="w-24 text-gray-600">目标价格 (USD)</label>
-              <input v-model.number="form.targetPrice" type="number" class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <input v-model.number="form.targetPrice" type="number" inputmode="decimal" class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 右侧：结果展示区 -->
       <div class="space-y-4">
-        <!-- 持仓概览 -->
         <div class="bg-white rounded-xl shadow-sm p-5">
           <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">持仓概览</h2>
           <div class="grid grid-cols-2 gap-3">
             <div class="bg-gray-50 rounded-lg p-3">
-              <p class="text-xs text-gray-500">总标的面值</p>
-              <p class="text-lg font-semibold text-gray-800">{{ totalFaceValue.toFixed(4) }} BTC</p>
+              <p class="text-xs text-gray-500">总标的面值 (乘数: {{ contractMultiplier }})</p>
+              <p class="text-lg font-semibold text-gray-800">{{ totalFaceValue.toFixed(4) }} {{ form.coin }}</p>
             </div>
             <div class="bg-gray-50 rounded-lg p-3">
               <p class="text-xs text-gray-500">开仓总成本</p>
-              <p class="text-lg font-semibold text-gray-800">{{ totalCost.toFixed(4) }} BTC</p>
+              <p class="text-lg font-semibold text-gray-800">{{ totalCost.toFixed(4) }} {{ form.coin }}</p>
             </div>
             <div class="bg-gray-50 rounded-lg p-3 col-span-2">
               <p class="text-xs text-gray-500">到期盈亏平衡价</p>
@@ -77,18 +80,17 @@
           </div>
         </div>
 
-        <!-- 到期行权结果 -->
         <div class="bg-white rounded-xl shadow-sm p-5">
           <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">到期行权收益</h2>
           <div class="space-y-3">
             <div class="flex justify-between items-center">
               <span class="text-gray-600">内在价值</span>
-              <span class="font-semibold">{{ expirationIntrinsicValue.toFixed(4) }} BTC</span>
+              <span class="font-semibold">{{ expirationIntrinsicValue.toFixed(4) }} {{ form.coin }}</span>
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-gray-600">净盈利 (BTC)</span>
-              <span :class="['font-bold', expirationProfitBtc >= 0 ? 'text-green-600' : 'text-red-500']">
-                {{ expirationProfitBtc >= 0 ? '+' : '' }}{{ expirationProfitBtc.toFixed(4) }} BTC
+              <span class="text-gray-600">净盈利 ({{ form.coin }})</span>
+              <span :class="['font-bold', expirationProfitCoin >= 0 ? 'text-green-600' : 'text-red-500']">
+                {{ expirationProfitCoin >= 0 ? '+' : '' }}{{ expirationProfitCoin.toFixed(4) }} {{ form.coin }}
               </span>
             </div>
             <div class="flex justify-between items-center">
@@ -97,7 +99,7 @@
                 {{ expirationProfitUsd >= 0 ? '+' : '' }}{{ expirationProfitUsd.toFixed(2) }} USD
               </span>
             </div>
-			<div class="flex justify-between items-center">
+            <div class="flex justify-between items-center">
               <span class="text-gray-600">净盈利 (CNY)</span>
               <span :class="['font-semibold', expirationProfitCny >= 0 ? 'text-green-600' : 'text-red-500']">
                 {{ expirationProfitCny >= 0 ? '+' : '' }}{{ expirationProfitCny.toFixed(2) }} CNY
@@ -114,14 +116,13 @@
       </div>
     </div>
 
-    <!-- 盈亏对照表 -->
     <div class="bg-white rounded-xl shadow-sm p-5 mt-6 overflow-x-auto">
       <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">到期盈亏对照表（行权价 ±50%）</h2>
       <table class="w-full text-sm text-center">
         <thead>
           <tr class="text-gray-600 border-b">
-            <th class="py-2 px-2">BTC价格 (USD)</th>
-            <th class="py-2 px-2">盈利 (BTC)</th>
+            <th class="py-2 px-2">{{ form.coin }}价格 (USD)</th>
+            <th class="py-2 px-2">盈利 ({{ form.coin }})</th>
             <th class="py-2 px-2">盈利 (USD)</th>
             <th class="py-2 px-2">收益率</th>
           </tr>
@@ -129,8 +130,8 @@
         <tbody>
           <tr v-for="item in profitTable" :key="item.price" class="border-b border-gray-100">
             <td class="py-2 px-2 font-medium">{{ item.price }}</td>
-            <td :class="['py-2 px-2', Number(item.profitBtc) >= 0 ? 'text-green-600' : 'text-red-500']">
-              {{ Number(item.profitBtc) >= 0 ? '+' : '' }}{{ item.profitBtc }}
+            <td :class="['py-2 px-2', Number(item.profitCoin) >= 0 ? 'text-green-600' : 'text-red-500']">
+              {{ Number(item.profitCoin) >= 0 ? '+' : '' }}{{ item.profitCoin }}
             </td>
             <td :class="['py-2 px-2', Number(item.profitUsd) >= 0 ? 'text-green-600' : 'text-red-500']">
               {{ Number(item.profitUsd) >= 0 ? '+' : '' }}{{ item.profitUsd }}
@@ -146,19 +147,22 @@
     <p class="text-center text-xs text-gray-400 mt-4">
       本计算器仅供理论参考，实际收益以平台成交结算为准
     </p>
+	
+	<script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+<script>LA.init({id:"1yxI18dBtpOcAN9I",ck:"1yxI18dBtpOcAN9I"})</script>
   </div>
 
   <script>
     const { createApp, reactive, computed, watch } = Vue;
-    const STORAGE_KEY = 'okx_option_calculator_v1';
+    const STORAGE_KEY = 'okx_option_calculator_v2'; // 更新了 storage key
 
     createApp({
       setup() {
         // 默认参数
         const defaultForm = {
+          coin: 'BTC',
           type: 'call',
-   
-          contractMultiplier: 0.01
+         
         };
 
         // 从本地存储恢复数据
@@ -182,8 +186,13 @@
           }
         }, { deep: true });
 
+        // 根据客服规则动态调整合约乘数
+        const contractMultiplier = computed(() => {
+          return form.coin === 'BTC' ? 0.01 : 0.1;
+        });
+
         // 总标的面值
-        const totalFaceValue = computed(() => form.contracts * form.contractMultiplier);
+        const totalFaceValue = computed(() => form.contracts * contractMultiplier.value);
         // 开仓总成本
         const totalCost = computed(() => totalFaceValue.value * form.entryPrice);
 
@@ -198,20 +207,26 @@
           }
         });
 
-        // 到期行权内在价值与盈亏
+        // 到期行权内在价值与盈亏 (完全匹配截图客服给出的算法)
         const expirationIntrinsicValue = computed(() => {
-          const S = form.targetPrice;
-          const K = form.strike;
+          const S = form.targetPrice || 0;
+          const K = form.strike || 0;
+          if (S === 0) return 0;
+          
           if (form.type === 'put') {
+            // Max [(行权价格 - 交割价格) / 交割价格, 0] × 合约乘数 × 持仓数量
             return Math.max((K - S) / S, 0) * totalFaceValue.value;
           } else {
+            // Max [(交割价格 - 行权价格) / 交割价格, 0] × 合约乘数 × 持仓数量
             return Math.max((S - K) / S, 0) * totalFaceValue.value;
           }
         });
-        const expirationProfitBtc = computed(() => expirationIntrinsicValue.value - totalCost.value);
-        const expirationProfitUsd = computed(() => expirationProfitBtc.value * form.targetPrice);
-		const expirationProfitCny = computed(() => expirationProfitBtc.value * form.targetPrice * 6.77);
-        const expirationYield = computed(() => totalCost.value === 0 ? 0 : (expirationProfitBtc.value / totalCost.value) * 100);
+
+        const expirationProfitCoin = computed(() => expirationIntrinsicValue.value - totalCost.value);
+        const expirationProfitUsd = computed(() => expirationProfitCoin.value * form.targetPrice);
+        // 更新了相对准确的离岸人民币参考汇率，可根据需要调整
+        const expirationProfitCny = computed(() => expirationProfitCoin.value * form.targetPrice * 6.77);
+        const expirationYield = computed(() => totalCost.value === 0 ? 0 : (expirationProfitCoin.value / totalCost.value) * 100);
 
         // 盈亏对照表
         const profitTable = computed(() => {
@@ -220,15 +235,18 @@
           for (let i = 0; i <= 10; i++) {
             const ratio = 0.5 + i * 0.1;
             const price = K * ratio;
+            
             const intrinsic = form.type === 'put'
               ? Math.max((K - price) / price, 0) * totalFaceValue.value
               : Math.max((price - K) / price, 0) * totalFaceValue.value;
-            const profitBtc = intrinsic - totalCost.value;
-            const profitUsd = profitBtc * price;
-            const yieldVal = totalCost.value === 0 ? 0 : (profitBtc / totalCost.value) * 100;
+              
+            const profitCoin = intrinsic - totalCost.value;
+            const profitUsd = profitCoin * price;
+            const yieldVal = totalCost.value === 0 ? 0 : (profitCoin / totalCost.value) * 100;
+            
             table.push({
               price: price.toFixed(0),
-              profitBtc: profitBtc.toFixed(4),
+              profitCoin: profitCoin.toFixed(4),
               profitUsd: profitUsd.toFixed(0),
               yield: yieldVal.toFixed(2)
             });
@@ -238,13 +256,14 @@
 
         return {
           form,
+          contractMultiplier,
           totalFaceValue,
           totalCost,
           breakEvenPrice,
           expirationIntrinsicValue,
-          expirationProfitBtc,
+          expirationProfitCoin,
           expirationProfitUsd,
-		  expirationProfitCny,
+          expirationProfitCny,
           expirationYield,
           profitTable
         };
