@@ -120,6 +120,17 @@
             }
         }
 
+        // 工具函数：毫秒时间戳转 MM-DD HH:mm:ss
+        function formatTime(ms) {
+            const date = new Date(ms);
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            return `${month}-${day}<br/>${hours}:${minutes}:${seconds}`;
+        }
+
         // 极简渲染函数（仅做必要的格式化）
         function renderOrders(dataList) {
             document.getElementById("wtnum").innerHTML = ` (${dataList.length})`;
@@ -130,8 +141,7 @@
                 const tr = document.createElement('tr');
 
                 // 1. 时间戳转成截图格式：YYYY-MM-DD HH:mm
-                const date = new Date(item.timestamp);
-                const time = `${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+                const time = formatTime(item.timestamp)
 
                 // 2. 动态判断“操作”类型（精准支持 8 种值）
                 let op = "";
