@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +8,13 @@
   <title>OKX 币本位期权计算器</title>
   <script src="./vue.global.prod.js"></script>
   <script src="./tailwindcss.js"></script>
+  <script src="/js/const.js"></script>
 </head>
+
 <body class="bg-gray-50 min-h-screen py-6 px-4">
   <div id="app" class="max-w-4xl mx-auto">
     <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">OKX 币本位期权计算器</h1>
-    
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="space-y-4">
         <div class="bg-white rounded-xl shadow-sm p-5">
@@ -19,7 +22,8 @@
           <div class="space-y-3">
             <div class="flex items-center gap-4">
               <label class="w-24 text-gray-600">标的资产</label>
-              <select v-model="form.coin" class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <select v-model="form.coin"
+                class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <option value="BTC">Bitcoin (BTC)</option>
                 <option value="ETH">Ethereum (ETH)</option>
               </select>
@@ -27,25 +31,29 @@
 
             <div class="flex items-center gap-4">
               <label class="w-24 text-gray-600">期权类型</label>
-              <select v-model="form.type" class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <select v-model="form.type"
+                class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <option value="call">看涨期权 (Call)</option>
                 <option value="put">看跌期权 (Put)</option>
               </select>
             </div>
-            
+
             <div class="flex items-center gap-4">
               <label class="w-24 text-gray-600">行权价 (USD)</label>
-              <input v-model.number="form.strike" type="number" inputmode="decimal" class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <input v-model.number="form.strike" type="number" inputmode="decimal"
+                class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
-            
+
             <div class="flex items-center gap-4">
               <label class="w-24 text-gray-600">持仓张数</label>
-              <input v-model.number="form.contracts" type="number" inputmode="decimal" class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <input v-model.number="form.contracts" type="number" inputmode="decimal"
+                class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
 
             <div class="flex items-center gap-4">
               <label class="w-24 text-gray-600">开仓均价 ({{ form.coin }})</label>
-              <input v-model.number="form.entryPrice" step="0.0001" type="number" inputmode="decimal" class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <input v-model.number="form.entryPrice" step="0.0001" type="number" inputmode="decimal"
+                class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
           </div>
         </div>
@@ -55,7 +63,8 @@
           <div class="space-y-3">
             <div class="flex items-center gap-4">
               <label class="w-24 text-gray-600">目标价格 (USD)</label>
-              <input v-model.number="form.targetPrice" type="number" inputmode="decimal" class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <input v-model.number="form.targetPrice" type="number" inputmode="decimal"
+                class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
           </div>
         </div>
@@ -143,17 +152,277 @@
         </tbody>
       </table>
     </div>
-
-    <p class="text-center text-xs text-gray-400 mt-4">
-      本计算器仅供理论参考，实际收益以平台成交结算为准
-    </p>
-	
-	<script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
-<script>LA.init({id:"1yxI18dBtpOcAN9I",ck:"1yxI18dBtpOcAN9I"})</script>
   </div>
 
+  <div id="cycle-app">
+    <a href="/cycle.html" title="比特币周期分析" class="progress-container">
+      <div class="progress-card">
+        <h2 class="card-title">{{ title }}</h2>
+
+        <div class="date-info">
+          <span>{{ dateText }}</span>
+          <div class="date-note">{{ noteText }}</div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-bar" :style="{ width: progressWidth, background: progressBg }">
+            <span class="progress-text">{{ percentText }}</span>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <span>{{ passedText }}</span>
+          <span>{{ totalText }}</span>
+          <span>{{ remainText }}</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <div id="cycle-max-data-app">
+    <a href="/cycle.html" title="比特币周期分析">
+      <!-- <div class="date-info">
+                查询区间：<strong>{{ configStartDate }}</strong> 至 <strong>{{ configEndDate }}</strong>
+            </div> -->
+      <div class="result" :class="{ 'error': statusError }">
+        <div class="price-item" style="text-align: center;">
+          <span class="price-val title">{{title}}</span>
+        </div>
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
+
+        <div class="price-item">
+          最高价：<span class="price-val high">{{ highPriceDisplay }}</span> USDT
+          <br v-if="highDate"><span class="date-val">发生日期: {{ highDate }}</span>
+        </div>
+
+        <div class="price-item">
+          最低价：<span class="price-val low">{{ lowPriceDisplay }}</span> USDT
+          <br v-if="lowDate"><span class="date-val">发生日期: {{ lowDate }}</span>
+        </div>
+
+        <div v-if="changeText" class="change-box">
+          <span v-html="changeText"></span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- 评论功能 -->
+  <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+  <div id="waline"></div>
+  <script type="module">
+    import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+
+    init({
+      el: '#waline',
+      serverURL: 'https://comment.traderpuma.com',
+    });
+  </script>
+  <style>
+    .wl-header label,
+    .wl-header input {
+      font-size: 14px !important;
+      color: #333;
+    }
+
+    .wl-editor {
+      padding: 10px;
+    }
+
+    .wl-action[title="Markdown Guide"],
+    .wl-text-number,
+    .wl-meta-foot {
+      display: none;
+    }
+
+    .wl-btn {
+      font-size: 14px;
+      min-width: 60px;
+    }
+
+    .wl-header-item {
+      align-items: center;
+    }
+
+    .wl-input {
+      height: 20px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+
+    .wl-action {
+      margin-right: 8px;
+    }
+
+    .wl-panel {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  </style>
+
+  <p class="text-center text-xs text-gray-400 mt-4" style="padding-bottom: 5px">
+    版权所有 © 2018-2026 <a href="/" style="text-decoration: underline;color:blueviolet">比特趋势大作手</a>. 保留所有权利
+  </p>
+
+  <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+  <script>LA.init({ id: "1yxI18dBtpOcAN9I", ck: "1yxI18dBtpOcAN9I" })</script>
+
+  <style>
+    #cycle-max-data-app {
+      box-sizing: border-box;
+      border-radius: 10px;
+      max-width: 56rem;
+      margin: 20px auto 20px auto;
+    }
+
+    #cycle-max-data-app a {
+      color: inherit;
+      text-decoration: inherit;
+    }
+
+    #cycle-max-data-app .date-info {
+      font-size: 14px;
+      color: #555;
+      background-color: #f1f3f5;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    #cycle-max-data-app .result {
+      padding: 15px;
+      border-radius: 6px;
+      background-color: #eee;
+      border-left: 5px solid #f0b90b;
+    }
+
+    #cycle-max-data-app .error {
+      color: red;
+      border-left-color: red;
+    }
+
+    #cycle-max-data-app .price-item {
+      margin: 10px 0;
+      font-size: 15px;
+    }
+
+    #cycle-max-data-app .price-val {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    #cycle-max-data-app .date-val {
+      color: #666;
+      font-size: 14px;
+    }
+
+    #cycle-max-data-app .high {
+      color: #0ecb81;
+    }
+
+    #cycle-max-data-app .low {
+      color: #f6465d;
+    }
+
+    #cycle-max-data-app .change-box {
+      margin-top: 15px;
+      padding: 10px;
+      background: #fff;
+      border: 1px dashed #ccc;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+
+    #cycle-max-data-app .title {
+      font-size: 20px;
+      color: #1a1a1a;
+      text-align: center;
+      font-weight: 600;
+    }
+
+
+
+
+    /* 卡片容器 - 移动端优先尺寸 */
+    .progress-card {
+      padding: 12px 20px 14px 20px;
+      box-sizing: border-box;
+      background-color: #eeeeee;
+      border-radius: 10px;
+      max-width: 56rem;
+      margin: 20px auto 20px auto;
+    }
+
+    .progress-card:hover {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 标题样式 */
+    .card-title {
+      font-size: 20px;
+      color: #1a1a1a;
+      text-align: center;
+      margin-bottom: 12px;
+      font-weight: 600;
+      margin-top: 0;
+    }
+
+    /* 日期区域 */
+    .date-info {
+      text-align: center;
+      color: #444444;
+      font-size: 15px;
+      margin-bottom: 22px;
+      line-height: 1.6;
+    }
+
+    .date-note {
+      font-size: 12px;
+      color: #888888;
+      margin-top: 4px;
+    }
+
+    /* 进度条外层容器 - 适配手机高度 */
+    .progress-wrap {
+      height: 40px;
+      background-color: #ddd;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    /* 进度条填充 */
+    .progress-bar {
+      height: 100%;
+      border-radius: 20px;
+      transition: width 0.8s ease, background 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 进度条内文字 */
+    .progress-text {
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: bold;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 底部天数行 - 移动端均分布局，防止挤压 */
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      color: #555555;
+      font-size: 14px;
+      padding: 0 5px;
+      flex-wrap: nowrap;
+    }
+  </style>
   <script>
-    const { createApp, reactive, computed, watch } = Vue;
+    const { createApp, reactive, computed, watch, onMounted, ref, onUnmounted } = Vue;
     const STORAGE_KEY = 'okx_option_calculator_v2'; // 更新了 storage key
 
     createApp({
@@ -162,7 +431,7 @@
         const defaultForm = {
           coin: 'BTC',
           type: 'call',
-         
+
         };
 
         // 从本地存储恢复数据
@@ -212,7 +481,7 @@
           const S = form.targetPrice || 0;
           const K = form.strike || 0;
           if (S === 0) return 0;
-          
+
           if (form.type === 'put') {
             // Max [(行权价格 - 交割价格) / 交割价格, 0] × 合约乘数 × 持仓数量
             return Math.max((K - S) / S, 0) * totalFaceValue.value;
@@ -235,15 +504,15 @@
           for (let i = 0; i <= 10; i++) {
             const ratio = 0.5 + i * 0.1;
             const price = K * ratio;
-            
+
             const intrinsic = form.type === 'put'
               ? Math.max((K - price) / price, 0) * totalFaceValue.value
               : Math.max((price - K) / price, 0) * totalFaceValue.value;
-              
+
             const profitCoin = intrinsic - totalCost.value;
             const profitUsd = profitCoin * price;
             const yieldVal = totalCost.value === 0 ? 0 : (profitCoin / totalCost.value) * 100;
-            
+
             table.push({
               price: price.toFixed(0),
               profitCoin: profitCoin.toFixed(4),
@@ -269,6 +538,297 @@
         };
       }
     }).mount('#app');
+
+
+
+    createApp({
+      setup() {
+        // 初始化今日日期
+        const today = new Date();
+        const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+        // 所有data变量转为ref响应式
+        const configStartDate = ref(cycleConfig.max_start_date);
+        const configEndDate = ref(todayStr);
+        const loadingText = ref('正在初始化...');
+        const isLoading = ref(true);
+        const statusError = ref(false);
+        const title = ref(cycleConfig.max_title);
+        const globalHigh = ref(null);
+        const globalLow = ref(null);
+        const highDate = ref('');
+        const lowDate = ref('');
+        const changeText = ref('');
+        const diffDay = ref(0);
+
+        // 计算属性
+        const highPriceDisplay = computed(() => {
+          if (isLoading.value) return loadingText.value;
+          return globalHigh.value !== null
+            ? globalHigh.value.toLocaleString(undefined, { minimumFractionDigits: 2 })
+            : '暂无数据';
+        });
+
+        const lowPriceDisplay = computed(() => {
+          if (isLoading.value) return loadingText.value;
+          return globalLow.value !== null
+            ? globalLow.value.toLocaleString(undefined, { minimumFractionDigits: 2 })
+            : '暂无数据';
+        });
+
+        // 工具方法
+        const formatDate = (timestamp) => {
+          const d = new Date(timestamp);
+          return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        };
+
+        // 请求接口
+        const fetchKlines = async (startTime, endTime) => {
+          const url = `https://daili.traderpuma.com/api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&startTime=${startTime}&endTime=${endTime}&limit=1000`;
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`API 请求失败，状态码: ${response.status}`);
+          return await response.json();
+        };
+
+        // 计算天数差
+        const getDaysDifference = (date1, date2) => {
+          const time1 = new Date(date1).getTime();
+          const time2 = new Date(date2).getTime();
+          const diffTime = Math.abs(time2 - time1);
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          return diffDays;
+        };
+
+        // 主查询逻辑
+        const queryPriceAuto = async () => {
+          let currentStartTime = new Date(configStartDate.value + 'T00:00:00').getTime();
+          const finalEndTime = new Date(configEndDate.value + 'T23:59:59').getTime();
+
+          if (currentStartTime > finalEndTime) {
+            statusError.value = true;
+            loadingText.value = '配置错误：当前日期尚未超过开始日期';
+            return;
+          }
+
+          let allData = [];
+          let hasMore = true;
+
+          try {
+            while (hasMore) {
+              loadingText.value = `--`;
+              const data = await fetchKlines(currentStartTime, finalEndTime);
+
+              if (data.length === 0) {
+                hasMore = false;
+              } else {
+                allData = allData.concat(data);
+                const lastKlineTime = data[data.length - 1][0];
+                currentStartTime = lastKlineTime + 86400000;
+
+                if (currentStartTime > finalEndTime || data.length < 1000) {
+                  hasMore = false;
+                }
+                await new Promise(resolve => setTimeout(resolve, 50));
+              }
+            }
+
+            if (allData.length === 0) {
+              isLoading.value = false;
+              return;
+            }
+
+            let maxHigh = -Infinity;
+            let minLow = Infinity;
+            let highTimestamp = 0;
+            let lowTimestamp = 0;
+
+            allData.forEach(kline => {
+              const openTime = kline[0];
+              const high = parseFloat(kline[2]);
+              const low = parseFloat(kline[3]);
+
+              if (high > maxHigh) {
+                maxHigh = high;
+                highTimestamp = openTime;
+              }
+              if (low < minLow) {
+                minLow = low;
+                lowTimestamp = openTime;
+              }
+            });
+
+            // 赋值
+            globalHigh.value = maxHigh;
+            globalLow.value = minLow;
+            highDate.value = formatDate(highTimestamp);
+            lowDate.value = formatDate(lowTimestamp);
+
+            // 渲染涨跌文本
+            if (lowTimestamp < highTimestamp) {
+              diffDay.value = getDaysDifference(lowDate.value, highDate.value);
+              const increase = ((maxHigh - minLow) / minLow) * 100;
+              changeText.value = `<span class="high">整个区间：最低点 ➔ 最高点</span><br />最大涨幅：<span class="high">+${increase.toFixed(2)}%</span><br />历经天数：<span class="high">${diffDay.value}天</span>`;
+            } else if (highTimestamp < lowTimestamp) {
+              diffDay.value = getDaysDifference(highDate.value, lowDate.value);
+              const decrease = ((minLow - maxHigh) / maxHigh) * 100;
+              changeText.value = `整个区间：<span class="low">最高点 ➔ 最低点</span><br />最大跌幅：<span class="low">${decrease.toFixed(2)}%</span><br />历经天数：<span class="low">${diffDay.value}天</span>`;
+            } else {
+              const increase = ((maxHigh - minLow) / minLow) * 100;
+              changeText.value = `整个区间：最高/最低价发生在同一天，日内振幅：${increase.toFixed(2)}%`;
+            }
+
+            isLoading.value = false;
+          } catch (error) {
+            statusError.value = true;
+            loadingText.value = `错误: ${error.message}`;
+            changeText.value = '';
+          }
+        };
+
+        // 挂载后执行
+        onMounted(() => {
+          queryPriceAuto();
+        });
+
+        // 模板需要用到的变量全部return
+        return {
+          configStartDate,
+          configEndDate,
+          loadingText,
+          isLoading,
+          statusError,
+          title,
+          globalHigh,
+          globalLow,
+          highDate,
+          lowDate,
+          changeText,
+          diffDay,
+          highPriceDisplay,
+          lowPriceDisplay
+        };
+      }
+    }).mount('#cycle-max-data-app');
+
+
+
+
+
+    const config = cycleConfig;
+
+    createApp({
+      setup() {
+        // 基础配置变量
+        const startDate = ref(config.startDate);
+        const endDate = ref(config.endDate);
+        const title = ref(config.title);
+
+        // 定时器存储
+        let timerId = null;
+
+        // 工具函数：解析 yyyy-MM-dd 到当天0点时间戳
+        const parseDate = (dateStr) => {
+          return new Date(dateStr + "T00:00:00");
+        };
+
+        // 核心计算逻辑（替换原生updateUI）
+        const calcData = () => {
+          const start = parseDate(startDate.value);
+          const end = parseDate(endDate.value);
+          const now = new Date();
+
+          const startMidnight = new Date(start).setHours(0, 0, 0, 0);
+          const endMidnight = new Date(end).setHours(0, 0, 0, 0);
+          const nowMidnight = new Date(now).setHours(0, 0, 0, 0);
+
+          const oneDay = 24 * 60 * 60 * 1000;
+          const totalDays = Math.round((endMidnight - startMidnight) / oneDay);
+
+          let passedDays = 0;
+          let remainDays = 0;
+          let progressPercent = 0;
+
+          if (nowMidnight < startMidnight) {
+            passedDays = 0;
+            remainDays = totalDays;
+            progressPercent = 0;
+          } else if (nowMidnight >= endMidnight) {
+            passedDays = totalDays;
+            remainDays = 0;
+            progressPercent = 100;
+          } else {
+            passedDays = Math.floor((nowMidnight - startMidnight) / oneDay);
+            remainDays = totalDays - passedDays;
+
+            const totalMs = endMidnight - startMidnight;
+            const passedMs = now.getTime() - startMidnight;
+            progressPercent = (passedMs / totalMs) * 100;
+            progressPercent = Math.max(0, Math.min(100, progressPercent));
+          }
+
+          progressPercent = Number(progressPercent.toFixed(2));
+
+          // 动态进度条背景色
+          let progressBg;
+          if (progressPercent >= 90) {
+            progressBg = 'linear-gradient(90deg, #DC2626, #EF4444)';
+          } else if (progressPercent >= 80) {
+            progressBg = 'linear-gradient(90deg, #F59E0B, #f5f536)';
+          } else {
+            progressBg = 'linear-gradient(90deg, #059669, #10B981)';
+          }
+
+          return {
+            progressPercent,
+            progressBg,
+            progressWidth: `${progressPercent}%`,
+            passedDays,
+            totalDays,
+            remainDays
+          };
+        };
+
+        // 计算属性统一渲染文本
+        const dateText = computed(() => `${startDate.value} ~ ${endDate.value}`);
+        const noteText = computed(() => "（仅供参考）");
+
+        // 实时进度数据计算属性
+        const progressData = computed(() => calcData());
+
+        // 派生文本
+        const percentText = computed(() => `${progressData.value.progressPercent}%`);
+        const passedText = computed(() => `已运行：${progressData.value.passedDays} 天`);
+        const totalText = computed(() => `总计：${progressData.value.totalDays} 天`);
+        const remainText = computed(() => `剩余：${progressData.value.remainDays} 天`);
+        const progressWidth = computed(() => progressData.value.progressWidth);
+        const progressBg = computed(() => progressData.value.progressBg);
+
+        // 挂载时开启1分钟刷新定时器
+        onMounted(() => {
+          timerId = setInterval(() => {
+            // computed会自动重新执行calcData更新视图
+          }, 60000);
+        });
+
+        // 页面卸载清除定时器，替代window.onunload
+        onUnmounted(() => {
+          if (timerId) clearInterval(timerId);
+        });
+
+        return {
+          title,
+          dateText,
+          noteText,
+          percentText,
+          passedText,
+          totalText,
+          remainText,
+          progressWidth,
+          progressBg
+        };
+      }
+    }).mount('#cycle-app');
   </script>
 </body>
+
 </html>
