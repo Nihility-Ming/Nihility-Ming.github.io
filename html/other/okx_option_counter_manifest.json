@@ -1,0 +1,19 @@
+{
+    "name": "OKX期权计算器",
+    "short_name": "期权计算器",
+    "start_url": "/html/other/okx_option_counter.html",
+    "display": "standalone",
+    "background_color": "#fff",
+    "description": "一个专业的比特币、以太坊OKX期权计算器，由比特趋势大作手开发",
+    "orientation": "portrait-primary",
+    "theme_color": "#fff",
+    "icons": [{
+        "src": "/html/other/images/okx_option_counter/manifest-icon-192.maskable.png",
+        "sizes": "192x192",
+        "type": "image/png"
+    }, {
+        "src": "/html/other/images/okx_option_counter/manifest-icon-512.maskable.png",
+        "sizes": "512x512",
+        "type": "image/png"
+    }]
+}
