@@ -6,7 +6,7 @@
   <link href="https://www.traderpuma.com/atom.xml" rel="self"/>
   
   <link href="https://www.traderpuma.com/"/>
-  <updated>2026-07-03T01:23:25.992Z</updated>
+  <updated>2026-07-17T03:29:44.983Z</updated>
   <id>https://www.traderpuma.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>币圈老人有话要说！</title>
+    <link href="https://www.traderpuma.com/%E4%BA%A4%E6%98%93%E5%BF%83%E5%BE%97/%E5%B8%81%E5%9C%88%E8%80%81%E4%BA%BA%E6%9C%89%E8%AF%9D%E8%A6%81%E8%AF%B4%EF%BC%81.html"/>
+    <id>https://www.traderpuma.com/%E4%BA%A4%E6%98%93%E5%BF%83%E5%BE%97/%E5%B8%81%E5%9C%88%E8%80%81%E4%BA%BA%E6%9C%89%E8%AF%9D%E8%A6%81%E8%AF%B4%EF%BC%81.html</id>
+    <published>2026-07-17T03:25:41.000Z</published>
+    <updated>2026-07-17T03:29:44.983Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;现在时间是&lt;code&gt;2026年7月17日&lt;/code&gt;，毫无争议，现在比特币市场正处于熊市之中，作为经历过几轮币圈牛熊周期的老人，我将揭示币圈熊市的几个重要特征。&lt;/p&gt;
+&lt;img data-src=&quot;/upload/2026/2026-07/2026-07-17_11-27-06.jpg&quot; alt=&quot;币圈老人&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="交易心得" scheme="https://www.traderpuma.com/categories/%E4%BA%A4%E6%98%93%E5%BF%83%E5%BE%97/"/>
+    
+    
+    <category term="交易心得" scheme="https://www.traderpuma.com/tags/%E4%BA%A4%E6%98%93%E5%BF%83%E5%BE%97/"/>
+    
+  </entry>
   
   <entry>
     <title>2026-07-03 比特币行情分析：铁底来了！？</title>
@@ -2811,41 +2837,6 @@ margin-top:</summary>
     
     
     <category term="交易心得" scheme="https://www.traderpuma.com/tags/%E4%BA%A4%E6%98%93%E5%BF%83%E5%BE%97/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>16位随机密码生成器</title>
-    <link href="https://www.traderpuma.com/%E7%A7%91%E7%A0%94%E6%8E%A2%E7%B4%A2/16%E4%BD%8D%E9%9A%8F%E6%9C%BA%E5%AF%86%E7%A0%81%E7%94%9F%E6%88%90%E5%99%A8.html"/>
-    <id>https://www.traderpuma.com/%E7%A7%91%E7%A0%94%E6%8E%A2%E7%B4%A2/16%E4%BD%8D%E9%9A%8F%E6%9C%BA%E5%AF%86%E7%A0%81%E7%94%9F%E6%88%90%E5%99%A8.html</id>
-    <published>2023-09-23T07:13:12.000Z</published>
-    <updated>2024-11-27T16:22:41.323Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;img data-src=&quot;/upload/2023/2023-11/随机密码生成器.jpg&quot; alt=&quot;随机密码生成器&quot; data-nozoom /&gt;
-
-&lt;p style=&quot;text-align:center; font-weight:bold&quot;&gt;=== 随机生成10个16位安全密码 ===&lt;/p&gt;
-
-&lt;p&gt;&lt;button onclick=&quot;exepass(this)&quot; style=&quot;padding:10px 30px;display:block;margin:auto;font-size:18px&quot;&gt;一键生成&lt;/button&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span id=&quot;passtxt&quot;&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;script&gt;
-// 定义一个函数，用于生成随机密码
-function generateRandomPassword() {
-  // 定义一个字符串，包含所有可能的字符
- </summary>
-        
-      
-    
-    
-    
-    <category term="科研探索" scheme="https://www.traderpuma.com/categories/%E7%A7%91%E7%A0%94%E6%8E%A2%E7%B4%A2/"/>
-    
-    
-    <category term="科研探索" scheme="https://www.traderpuma.com/tags/%E7%A7%91%E7%A0%94%E6%8E%A2%E7%B4%A2/"/>
     
   </entry>
   
