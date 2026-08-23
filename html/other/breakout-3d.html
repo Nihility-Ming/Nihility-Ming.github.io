@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>图表形态突破 · 四种情况 3D 演示</title>
+<style>
+:root{--bg:#0d1117;--panel:rgba(15,20,30,.85);--bd:#263041;--tx:#dbe4f0;--dim:#8b98ab}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:var(--bg);font-family:"Segoe UI",system-ui,"Microsoft YaHei",sans-serif;color:var(--tx);-webkit-tap-highlight-color:transparent}
+#app{position:fixed;inset:0}
+canvas{display:block;touch-action:none}
+.card{position:absolute;background:var(--panel);border:1px solid var(--bd);border-radius:12px;backdrop-filter:blur(8px);z-index:10}
+#title{top:14px;left:16px;padding:10px 16px}
+#title h1{font-size:15px;font-weight:600;letter-spacing:.5px}
+#title span{font-size:11px;color:var(--dim)}
+#tabs{top:14px;left:50%;transform:translateX(-50%);display:flex;gap:6px;padding:6px;max-width:min(72vw,680px);overflow-x:auto;scrollbar-width:none}
+#tabs::-webkit-scrollbar{display:none}
+#tabs button{all:unset;cursor:pointer;padding:8px 14px;border-radius:9px;font-size:12px;color:var(--dim);transition:.18s;white-space:nowrap}
+#tabs button:hover{color:var(--tx);background:#1b2432}
+#tabs button.on{color:#fff;background:#2563eb;font-weight:600}
+#legend{top:14px;right:16px;padding:10px 14px;font-size:11px;color:var(--dim);display:flex;flex-direction:column;gap:6px}
+.chip{display:flex;align-items:center;gap:8px}
+.sw{width:13px;height:13px;border-radius:4px;display:inline-block}
+#info{left:16px;bottom:36px;width:min(440px,calc(100vw - 32px));padding:14px 18px}
+#info h2{font-size:15px;margin-bottom:6px;color:#fff}
+#info p{font-size:12px;line-height:1.8;color:var(--dim)}
+#info b{color:#fbbf24;font-weight:600}
+#ctrl{bottom:36px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:8px 12px}
+#ctrl button{all:unset;cursor:pointer;width:34px;height:34px;border-radius:9px;background:#1b2432;color:#fff;text-align:center;line-height:34px;font-size:14px}
+#ctrl button:hover{background:#263349}
+#ctrl select{background:#1b2432;color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:5px 8px;font-size:12px;outline:none}
+#bar{position:absolute;left:0;bottom:0;height:3px;background:linear-gradient(90deg,#2563eb,#22d3ee);width:0;z-index:10}
+#labels{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:5}
+.lbl{position:absolute;transform:translate(-50%,-135%);padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.85);border:1px solid rgba(255,255,255,.28);opacity:0;transition:opacity .3s;pointer-events:auto;cursor:pointer}
+.lbl.below{transform:translate(-50%,35%)}
+.lbl.show{opacity:1}
+@media(max-width:900px){#legend,#info p{display:none}}
+@media(max-width:700px){
+#title{top:10px;left:10px;padding:7px 12px}
+#title h1{font-size:13px}
+#title span{display:none}
+#info{top:54px;left:10px;bottom:auto;width:auto;max-width:calc(100vw - 20px);padding:8px 12px;border-radius:10px}
+#info h2{font-size:12px;margin:0}
+#tabs{top:auto;bottom:76px;max-width:94vw}
+#tabs button{padding:7px 10px;font-size:11px}
+#ctrl{bottom:16px}
+.lbl{font-size:12px}
+#bar{height:4px}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="labels"></div>
+<div class="card" id="title"><h1>图表形态突破 · 四种情况</h1><span>左键旋转 · 滚轮缩放 · 右键平移 · 点击标注置顶</span></div>
+<div class="card" id="tabs"></div>
+<div class="card" id="legend">
+  <span class="chip"><span class="sw" style="background:#22c55e"></span>阳线</span>
+  <span class="chip"><span class="sw" style="background:#f4506a"></span>阴线</span>
+  <span class="chip"><span class="sw" style="background:#fbbf24;height:3px;border-radius:2px"></span>高点连线 · 突破开仓</span>
+  <span class="chip"><span class="sw" style="background:rgba(56,189,248,.35)"></span>形态区域</span>
+  <span class="chip"><span class="sw" style="background:rgba(148,163,184,.4)"></span>成交量</span>
+</div>
+<div class="card" id="info"><h2></h2><p></p></div>
+<div class="card" id="ctrl">
+  <button id="btnPlay" title="播放/暂停">⏸</button>
+  <button id="btnReplay" title="重播">↺</button>
+  <select id="speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select>
+</div>
+<div id="bar"></div>
+
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+}}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+/* ---------- 基础常量 ---------- */
+const RES=105, SUP=95, FLOOR=84;          // 阻力位 / 支撑位 / 地面高度
+const UP=0x22c55e, DOWN=0xf4506a;
+const CPS=13;                              // 每秒揭示K线数
+
+/* ---------- 可复现随机数 ---------- */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+/* ---------- 场景数据：按阶段生成锚点路径 ---------- */
+function buildScenario(phases,seed){
+  const rng=mulberry32(seed),cs=[];let prev=null;
+  for(const ph of phases){
+    const pts=[];
+    for(let i=0;i<ph.a.length-1;i++)for(let j=0;j<ph.s;j++){
+      const t=j/ph.s;
+      pts.push({p:ph.a[i]+(ph.a[i+1]-ph.a[i])*t+(rng()-.5)*ph.v,vol:ph.vol*(0.6+rng()*0.8)});
+    }
+    pts.push({p:ph.a[ph.a.length-1]+(rng()-.5)*ph.v,vol:ph.vol});
+    for(const pt of pts){
+      const o=prev?prev.c+(rng()-.5)*0.35:pt.p;
+      const c=pt.p,wk=0.25+rng()*0.45;
+      cs.push({o,c,h:Math.max(o,c)+wk,l:Math.min(o,c)-wk,vol:pt.vol,up:c>=o});
+      prev=cs[cs.length-1];
+    }
+  }
+  return cs;
+}
+
+const CONS={a:[100,98.5,102.5,97.5,103.5,96.5,102,98,101.5,99,103.8],s:3,v:0.5,vol:1};
+
+const SCEN=[
+{ name:'① 真突破 · 直接延续',
+  desc:'放量突破后<b>沿方向持续运行</b>，趋势确立。<br>要点：<b>突破K线实体大、量能显著放大</b>，突破后快速脱离形态、不回头——这是最强的一种走势。',
+  phases:[CONS,{a:[103.8,106.8,108.5,111,113.5,116.5,119.5,122.5,126],s:3,v:0.55,vol:2.6}],
+  seed:11 },
+{ name:'② 回抽确认后再延续',
+  desc:'回落至颈线/边界附近，<b>确认支撑阻力互换</b>，随后继续原方向发展。<br>要点：回抽<b>缩量</b>、收盘不重回形态内部，再次进攻时放量——最常见的健康走势。',
+  phases:[CONS,
+    {a:[103.8,106.6],s:2,v:0.45,vol:2.8},
+    {a:[106.6,105.6,104.9,106.1],s:2,v:0.32,vol:1.1},
+    {a:[106.1,108.4,111,114.5,118.5,123.5],s:3,v:0.5,vol:2.2}],
+  seed:23 },
+{ name:'③ 先打止损 · 再开趋势',
+  desc:'突破后<b>反向插针扫掉追单者/逆势者的止损</b>（流动性收割），完成换手后迅速启动真正的趋势行情。<br>要点：扫损常伴<b>长影线 + 快速收回</b>。注意：<b>插针深度可能击穿常规−5%止损</b>——宜用结构止损，或在价格收回颈线时<b>二次进场</b>。',
+  phases:[CONS,
+    {a:[103.8,106.2],s:2,v:0.45,vol:2.4},
+    {a:[106.2,103.6,99.6,102.2],s:2,v:0.35,vol:2.9},
+    {a:[102.2,105.2,108.5,112,116,120.5,125.5],s:3,v:0.55,vol:3.0}],
+  seed:51 },
+{ name:'④ 假突破（骗线）',
+  desc:'突破后<b>迅速返回形态内部甚至反向运动</b>，形成陷阱。<br>要点：<b>量能不足、长上影滞涨</b>；收回边界内即失效，<b>止损离场</b>果断认错。',
+  phases:[CONS,
+    {a:[103.8,106.4,106.9],s:1,v:0.3,vol:1.5},
+    {a:[106.9,105.2,103,100.8,98.6,96.4,94.5,92.8,90.5,88],s:2,v:0.5,vol:2.0}],
+  seed:37 }
+];
+
+/* ---------- three.js 场景 ---------- */
+const app=document.getElementById('app');
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+app.appendChild(renderer.domElement);
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x0d1117);
+scene.fog=new THREE.Fog(0x0d1117,150,330);
+
+const camera=new THREE.PerspectiveCamera(45,innerWidth/innerHeight,.1,600);
+camera.position.set(58,132,96);
+
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.target.set(29,103,0);
+controls.enableDamping=true;controls.dampingFactor=.08;
+controls.minDistance=30;controls.maxDistance=280;controls.maxPolarAngle=1.5;
+
+/* 相机自适应：竖屏(手机)自动拉远 */
+function fitCam(){
+  const t=new THREE.Vector3(31,104,0);
+  const dir=new THREE.Vector3(29,30,98);
+  const len=dir.length()*Math.pow(Math.max(1,1.18/camera.aspect),0.92);
+  dir.normalize();
+  controls.target.copy(t);
+  camera.position.copy(t).addScaledVector(dir,len);
+}
+fitCam();
+
+scene.add(new THREE.HemisphereLight(0xbfd4ff,0x0a0f18,.95));
+const dl=new THREE.DirectionalLight(0xffffff,1.15);dl.position.set(30,150,70);scene.add(dl);
+scene.add(new THREE.AmbientLight(0xffffff,.25));
+
+const grid=new THREE.GridHelper(180,36,0x223047,0x141c2a);
+grid.position.set(30,FLOOR,0);scene.add(grid);
+
+let group=null,labels=[],cur=0,revealed=0,elapsed=0,playing=true,speed=1,zTop=50;
+
+/* ---------- 构建某一情景 ---------- */
+function findFirstAbove(cs){for(let i=0;i<cs.length;i++)if(cs[i].h>RES)return i;return cs.length-1}
+function localExtreme(cs,a,b,key,min){let k=a;for(let i=a;i<=Math.min(b,cs.length-1);i++){if(min?cs[i][key]<cs[k][key]:cs[i][key]>cs[k][key])k=i}return k}
+
+function build(idx){
+  cur=idx;
+  if(group){group.traverse(o=>{o.geometry&&o.geometry.dispose();o.material&&o.material.dispose&&o.material.dispose()});scene.remove(group)}
+  document.getElementById('labels').innerHTML='';labels=[];
+  const sc=SCEN[idx],cs=buildScenario(sc.phases,sc.seed);
+  const N=cs.length;group=new THREE.Group();scene.add(group);
+  sc._extras=[];sc._flashed=false;
+
+  /* 高点连线：连接形态期两个最显著高点，作为突破基准线 */
+  const pat=31;
+  const iMax=(a,b)=>{let k=a;for(let i=a;i<=b;i++)if(cs[i].h>cs[k].h)k=i;return k};
+  const P2=iMax(Math.max(2,pat-8),Math.min(pat,N)-1);
+  const P1=iMax(2,Math.max(2,P2-4));
+  const yAt=x=>cs[P1].h+(cs[P2].h-cs[P1].h)*(x-P1)/(P2-P1);
+  let iE=P2+1;for(let i=iE;i<N;i++){if(cs[i].h>yAt(i)){iE=i;break}}
+  sc._iE=iE;
+
+  /* 形态区域 */
+  const zone=new THREE.Mesh(
+    new THREE.BoxGeometry(31,RES-SUP,0.08),
+    new THREE.MeshBasicMaterial({color:0x38bdf8,transparent:true,opacity:.07}));
+  zone.position.set(15.5,(SUP+RES)/2,-0.8);group.add(zone);
+  const edge=new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.BoxGeometry(31,RES-SUP,0.08)),
+    new THREE.LineBasicMaterial({color:0x38bdf8,transparent:true,opacity:.35}));
+  edge.position.copy(zone.position);group.add(edge);
+
+  /* 支撑虚线 */
+  const mkLine=(y,color,op)=>{
+    const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-4,y,0),new THREE.Vector3(N+4,y,0)]);
+    const l=new THREE.Line(g,new THREE.LineDashedMaterial({color,dashSize:.9,gapSize:.6,transparent:true,opacity:op}));
+    l.computeLineDistances();return l};
+  group.add(mkLine(SUP,0x64748b,.5));
+
+  /* 高点连线（突破基准线） */
+  const tg=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(P1-2,yAt(P1-2),0),new THREE.Vector3(N+4,yAt(N+4),0)]);
+  const resLine=new THREE.Line(tg,new THREE.LineDashedMaterial({color:0xfbbf24,dashSize:.9,gapSize:.6,transparent:true,opacity:.85}));
+  resLine.computeLineDistances();group.add(resLine);
+
+  /* K线 + 成交量 */
+  const bodies=[],wicks=[],vols=[];
+  for(let i=0;i<N;i++){const k=cs[i];
+    const col=k.up?UP:DOWN;
+    const bh=Math.max(Math.abs(k.c-k.o),.06);
+    const b=new THREE.Mesh(new THREE.BoxGeometry(.62,bh,.62),
+      new THREE.MeshStandardMaterial({color:col,roughness:.45,metalness:.1,emissive:col,emissiveIntensity:.22}));
+    b.position.set(i,(k.o+k.c)/2,0);group.add(b);bodies.push(b);
+    const w=new THREE.Mesh(new THREE.BoxGeometry(.09,k.h-k.l,.09),
+      new THREE.MeshStandardMaterial({color:col,roughness:.6,emissive:col,emissiveIntensity:.12}));
+    w.position.set(i,(k.h+k.l)/2,0);group.add(w);wicks.push(w);
+    const vh=k.vol*1.15;
+    const vb=new THREE.Mesh(new THREE.BoxGeometry(.55,vh,.55),
+      new THREE.MeshBasicMaterial({color:0x94a3b8,transparent:true,opacity:.26}));
+    vb.position.set(i,FLOOR+vh/2,-2.2);group.add(vb);vols.push(vb);
+  }
+
+  /* 注释标签 */
+  const iA=findFirstAbove(cs);
+  const entry=cs[iE].c,stop=entry*0.95;
+  let iHit=-1;for(let i=iE;i<N;i++){if(cs[i].l<=stop){iHit=i;break}}
+  const pct=(cs[N-1].c-entry)/entry*100;
+
+  /* 开仓点 / 止损线 */
+  const seg=(y,color,op,x0)=>{
+    const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x0,y,0),new THREE.Vector3(N+4,y,0)]);
+    const l=new THREE.Line(g,new THREE.LineDashedMaterial({color,dashSize:.7,gapSize:.5,transparent:true,opacity:op}));
+    l.computeLineDistances();group.add(l);return l};
+  seg(entry,0x4ade80,.85,iE);
+  seg(stop,0xf87171,.75,iE);
+  const dm=new THREE.Mesh(new THREE.OctahedronGeometry(.6),
+    new THREE.MeshStandardMaterial({color:0x4ade80,emissive:0x4ade80,emissiveIntensity:.8}));
+  dm.position.set(iE,Math.min(cs[iE].c,yAt(iE))-1.5,0);group.add(dm);
+  sc._extras.push({o:dm,at:iE});
+
+  const anns=[];
+  const add=(x,y,text,color,below)=>anns.push({x,y,text,color,below});
+  add(iE+1,Math.max(cs[iE].h,yAt(iE))+1.8,'▲ 开仓点（突破高点连线）','#4ade80');
+  add(Math.min(iE+13,N-2),stop-0.5,'止损 −5%','#f87171',true);
+  if(idx===0){
+    add(N-5,cs[N-5].h+1.6,'趋势延续 · 浮盈 +'+pct.toFixed(1)+'%','#4ade80');
+  }else if(idx===1){
+    const iP=localExtreme(cs,iA+2,iA+9,'l',true);
+    add(iP+1,cs[iP].l-1.2,'回抽确认 · 支撑阻力互换','#38bdf8',true);
+    add(iA+14,cs[iA+14].h+1.6,'再度上攻 · 浮盈 +'+pct.toFixed(1)+'%','#4ade80');
+  }else if(idx===2){
+    const iS=localExtreme(cs,iA+2,iA+10,'l',true);
+    add(iS+1,cs[iS].l-1.8,'插针扫损（打止损）','#fb7185',true);
+    if(iHit>=0){
+      let iR=iHit;while(iR<N&&cs[iR].c<=RES)iR++;iR=Math.min(iR,N-1);
+      const p2=(cs[N-1].c-cs[iR].c)/cs[iR].c*100;
+      add(Math.min(iR+2,N-1),cs[Math.min(iR+2,N-1)].h+1.6,'收回颈线 · 真趋势启动（二次进场浮盈 +'+p2.toFixed(1)+'%）','#4ade80');
+    }else{
+      add(iA+12,cs[Math.min(iA+12,N-1)].h+1.6,'真趋势启动 · 浮盈 +'+pct.toFixed(1)+'%','#4ade80');
+    }
+  }else{
+    const iM=localExtreme(cs,iA,iA+4,'h',false);
+    add(iA+5,cs[iA+5].l-1.2,'跌回形态内 → 假突破','#f87171',true);
+    if(iHit>=0)add(Math.min(iHit+2,N-1),cs[Math.min(iHit+1,N-1)].l-2.4,'✕ 止损触发 −5%','#ef4444',true);
+  }
+
+  const box=document.getElementById('labels');
+  for(const a of anns){
+    const d=document.createElement('div');
+    d.className='lbl'+(a.below?' below':'');
+    d.textContent=a.text;d.style.color=a.color;d.style.background='rgba(10,14,22,.78)';
+    d.addEventListener('click',()=>{zTop++;d.style.zIndex=zTop});
+    box.appendChild(d);a.el=d;
+  }
+
+  sc._cs=cs;sc._objs=[...bodies,...wicks,...vols];sc._resLine=resLine;sc._anns=anns;
+  revealed=0;elapsed=0;playing=true;
+  document.getElementById('btnPlay').textContent='⏸';
+  document.getElementById('info').querySelector('h2').textContent=sc.name;
+  document.getElementById('info').querySelector('p').innerHTML=sc.desc;
+  [...document.querySelectorAll('#tabs button')].forEach((b,i)=>b.classList.toggle('on',i===idx));
+
+  /* 价格标签 */
+  if(!window._ptag){const p=document.createElement('div');p.className='lbl';p.style.background='#2563eb';p.style.border='none';p.style.pointerEvents='none';document.getElementById('labels').appendChild(p);window._ptag=p}
+}
+
+/* ---------- UI ---------- */
+const tabs=document.getElementById('tabs');
+SCEN.forEach((s,i)=>{const b=document.createElement('button');b.textContent=s.name;b.onclick=()=>build(i);tabs.appendChild(b)});
+const btnPlay=document.getElementById('btnPlay'),btnReplay=document.getElementById('btnReplay');
+btnPlay.onclick=()=>{playing=!playing;if(revealed>=SCEN[cur]._cs.length){elapsed=0;}btnPlay.textContent=playing?'⏸':'▶'};
+btnReplay.onclick=()=>{elapsed=0;playing=true;btnPlay.textContent='⏸';SCEN[cur]._flashed=false};
+document.getElementById('speed').onchange=e=>speed=parseFloat(e.target.value);
+
+/* ---------- 标注投影 ---------- */
+const V=new THREE.Vector3();
+function place(el,x,y){V.set(x,y,0).project(camera);
+  if(V.z>1){el.style.display='none';return}
+  el.style.display='block';
+  el.style.left=(V.x*.5+.5)*innerWidth+'px';
+  el.style.top=(-V.y*.5+.5)*innerHeight+'px'}
+
+/* ---------- 主循环 ---------- */
+const clock=new THREE.Clock();let flash=-1e9;
+function loop(){
+  requestAnimationFrame(loop);
+  const dt=Math.min(clock.getDelta(),.05);
+  const sc=SCEN[cur],cs=sc._cs,N=cs.length;
+  if(playing){elapsed+=dt*speed*CPS;
+    const r=Math.min(N,Math.floor(elapsed));
+    for(let i=0;i<N;i++){const vis=i<r;sc._objs[i].visible=vis;sc._objs[i+N].visible=vis;sc._objs[i+2*N].visible=vis}
+    if(r>revealed&&(r-1)===sc._iE&&!sc._flashed){flash=performance.now();sc._flashed=true}
+    revealed=r;
+    if(r>=N){playing=false;btnPlay.textContent='▶'}
+  }
+  for(const e of sc._extras)e.o.visible=e.at<revealed;
+  document.getElementById('bar').style.width=(revealed/N*100)+'%';
+
+  /* 突破瞬间颈线闪烁 */
+  const p=Math.max(0,1-(performance.now()-flash)/700);
+  sc._resLine.material.opacity=.55+.45*p*Math.abs(Math.sin((performance.now()-flash)/60));
+
+  /* 标签 */
+  for(const a of sc._anns){
+    const vis=a.x<revealed;
+    if(vis&&!a.el.classList.contains('show')){zTop++;a.el.style.zIndex=zTop}
+    a.el.classList.toggle('show',vis);
+    if(vis)place(a.el,a.x,a.y);
+  }
+  const ptag=window._ptag;
+  if(revealed>0){const k=cs[revealed-1];
+    ptag.classList.add('show');
+    ptag.textContent=k.c.toFixed(2);
+    place(ptag,revealed-1,k.c+1.1);
+  }else ptag.classList.remove('show');
+
+  controls.update();
+  renderer.render(scene,camera);
+}
+
+addEventListener('resize',()=>{
+  camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);fitCam()});
+
+build(0);
+loop();
+</script>
+</body>
+</html>
