@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>维克多趋势交易系统 · 双突破 × 123 × 2B</title>
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --coal:#2b0f0e;
+  --lava:#7f1d1d;
+  --ember:#a5281c;
+  --flame:#d94a2e;
+  --flame2:#e8582a;
+  --glow:#f0883e;
+  --glow-light:#f5b061;
+  --ash:#fdf3ee;
+  --bg:#fbf2ec;
+  --card:#ffffff;
+  --ink:#2a1410;
+  --ink-soft:#6b4a42;
+  --amber:#f0a04b;
+  --cold:#4a4a55;
+  --shadow:0 12px 40px rgba(127,29,29,.12);
+  --shadow-sm:0 4px 16px rgba(127,29,29,.08);
+  --radius:20px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Noto Sans SC",-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--flame);text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* nav */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(251,242,236,.86);
+  backdrop-filter:saturate(180%) blur(14px);
+  border-bottom:1px solid rgba(127,29,29,.12);
+}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:66px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.18rem;color:var(--coal)}
+.brand svg{width:30px;height:30px}
+.nav-links{display:flex;gap:22px;list-style:none}
+.nav-links a{color:var(--lava);font-weight:500;font-size:.95rem;transition:.2s}
+.nav-links a:hover{color:var(--flame)}
+
+/* hero */
+.hero{
+  position:relative;overflow:hidden;
+  background:linear-gradient(140deg,#2b0f0e 0%,#7f1d1d 42%,#d94a2e 78%,#f0883e 100%);
+  color:#fff;padding:88px 0 120px;
+}
+.hero::before{content:"";position:absolute;inset:0;opacity:.18;
+  background:radial-gradient(circle at 82% 18%,#f5b061 0,transparent 40%),
+             radial-gradient(circle at 12% 85%,#e8582a 0,transparent 45%);}
+.flame-float{position:absolute;opacity:.5;animation:drift 9s ease-in-out infinite}
+.flame-float.f1{top:18%;right:12%;width:64px}
+.flame-float.f2{top:60%;right:26%;width:44px;animation-delay:-3s}
+.flame-float.f3{top:26%;right:38%;width:32px;animation-delay:-6s}
+@keyframes drift{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-16px) rotate(10deg)}}
+.hero-inner{position:relative;z-index:2}
+.kicker{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.25);padding:6px 16px;border-radius:999px;font-size:.85rem;font-weight:500;letter-spacing:.5px}
+.hero h1{font-family:"Noto Serif SC",serif;font-size:3rem;font-weight:700;margin:22px 0 14px;letter-spacing:1px}
+.hero h1 span{color:#ffd9b3}
+.hero p.sub{max-width:640px;font-size:1.1rem;color:#ffe7d4;opacity:.95}
+.hero-meta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);
+  padding:9px 16px;border-radius:12px;font-weight:600;font-size:.92rem}
+.hero-wave{position:absolute;left:0;right:0;bottom:-1px;line-height:0}
+.hero-wave svg{width:100%;height:90px;display:block}
+
+/* section */
+section{padding:74px 0}
+.section-head{text-align:center;max-width:720px;margin:0 auto 48px}
+.section-head .tag{display:inline-block;color:var(--flame);font-weight:700;font-size:.82rem;
+  letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.section-head h2{font-family:"Noto Serif SC",serif;font-size:2.1rem;color:var(--coal);margin-bottom:12px}
+.section-head p{color:var(--ink-soft)}
+
+/* cards */
+.grid{display:grid;gap:22px}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.card{background:var(--card);border:1px solid rgba(127,29,29,.10);border-radius:var(--radius);
+  padding:30px;box-shadow:var(--shadow-sm);transition:.28s}
+.card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+.card .num{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;
+  border-radius:14px;background:linear-gradient(135deg,var(--flame2),var(--flame));color:#fff;
+  font-weight:900;font-size:1.2rem;margin-bottom:18px}
+.card h3{font-size:1.25rem;color:var(--coal);margin-bottom:10px}
+.card p{color:var(--ink-soft);font-size:.95rem}
+
+/* about */
+.about-card{display:grid;grid-template-columns:340px 1fr;background:#fff;border-radius:var(--radius);
+  border:1px solid rgba(127,29,29,.10);box-shadow:var(--shadow-sm);overflow:hidden}
+.about-fig{position:relative;overflow:hidden;background:#f5e2d8}
+.about-fig img{width:100%;height:100%;object-fit:cover;display:block}
+.about-body{padding:42px}
+.about-body .tag{display:inline-block;color:var(--flame);font-weight:700;font-size:.8rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.about-body h3{font-family:"Noto Serif SC",serif;font-size:1.75rem;color:var(--coal);margin-bottom:4px}
+.about-body .en{color:var(--ink-soft);font-size:.95rem;margin-bottom:16px}
+.about-body p{color:var(--ink-soft);font-size:.95rem;margin-bottom:14px}
+.about-facts{list-style:none;margin-top:14px}
+.about-facts li{position:relative;padding-left:22px;margin-bottom:8px;color:var(--ink-soft);font-size:.93rem}
+.about-facts li::before{content:"";position:absolute;left:2px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--flame)}
+.quote{margin-top:18px;padding:16px 20px;background:linear-gradient(135deg,#fde4d8,#fdf3ee);
+  border-left:4px solid var(--flame);border-radius:10px;color:var(--ember);font-weight:600}
+
+/* chart cards */
+.chart-card{grid-column:1 / -1;display:grid;grid-template-columns:1.05fr 1fr;gap:0;padding:0;overflow:hidden}
+.chart-fig{background:linear-gradient(180deg,#fdf8f3,#fbece3);display:flex;align-items:center;justify-content:center;padding:26px}
+.chart-body{padding:34px}
+.chart-body h3{font-size:1.45rem;color:var(--coal);margin-bottom:14px}
+.chart-body .rule-tag{display:inline-block;background:#fde4d8;color:var(--ember);font-weight:700;
+  font-size:.78rem;padding:4px 12px;border-radius:999px;margin-bottom:14px}
+.chart-body p{color:var(--ink-soft);margin-bottom:10px;font-size:.96rem}
+.pill-list{list-style:none;margin-top:12px}
+.pill-list li{position:relative;padding-left:22px;margin-bottom:8px;color:var(--ink-soft);font-size:.93rem}
+.pill-list li::before{content:"";position:absolute;left:2px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--flame)}
+.badge-up{color:var(--flame);font-weight:700}
+.badge-down{color:var(--cold);font-weight:700}
+
+/* process timeline */
+.steps{position:relative;max-width:820px;margin:0 auto}
+.steps::before{content:"";position:absolute;left:27px;top:10px;bottom:10px;width:3px;
+  background:linear-gradient(var(--flame2),var(--flame),var(--lava));border-radius:3px;opacity:.35}
+.step{position:relative;padding:0 0 34px 78px}
+.step:last-child{padding-bottom:0}
+.step .dot{position:absolute;left:8px;top:2px;width:42px;height:42px;border-radius:50%;
+  background:#fff;border:3px solid var(--flame);display:flex;align-items:center;justify-content:center;
+  font-weight:900;color:var(--flame)}
+.step h4{font-size:1.12rem;color:var(--coal);margin-bottom:6px}
+.step p{color:var(--ink-soft);font-size:.95rem}
+.step .sub{font-size:.86rem;color:var(--flame2);font-weight:600;margin-top:4px}
+
+/* table */
+.table-wrap{overflow-x:auto;border-radius:var(--radius);box-shadow:var(--shadow-sm);background:#fff;border:1px solid rgba(127,29,29,.10)}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th{background:linear-gradient(135deg,var(--coal),var(--lava));color:#fff;text-align:left;
+  padding:16px 18px;font-weight:600;font-size:.95rem}
+td{padding:15px 18px;border-top:1px solid rgba(127,29,29,.10);font-size:.93rem;color:var(--ink-soft)}
+tbody tr:nth-child(even){background:#fdf6f0}
+th:first-child,td:first-child{font-weight:700;color:var(--coal)}
+.flag{display:inline-block;padding:3px 11px;border-radius:999px;font-size:.8rem;font-weight:700}
+.flag.long{background:#fde4d8;color:var(--ember)}
+.flag.short{background:#ececf2;color:var(--cold)}
+
+/* risk */
+.risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.risk-item{background:#fff;border-radius:var(--radius);border:1px solid rgba(127,29,29,.10);
+  padding:24px;text-align:center;box-shadow:var(--shadow-sm)}
+.risk-item .val{font-size:2rem;font-weight:900;color:var(--flame);font-family:"Noto Serif SC",serif}
+.risk-item .lbl{color:var(--ink-soft);font-size:.9rem;margin-top:6px}
+.formula{background:linear-gradient(135deg,#fde4d8,#fdf3ee);border-radius:16px;padding:22px 26px;
+  margin-top:26px;text-align:center;font-weight:600;color:var(--ember);font-size:1.05rem}
+.formula code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#fff;color:var(--coal);
+  padding:4px 10px;border-radius:8px;margin:0 4px;font-size:.95rem}
+
+/* disclaimer */
+.disclaimer{background:linear-gradient(135deg,var(--coal),var(--lava));color:#e8c9bd;
+  border-radius:var(--radius);padding:34px;margin-top:40px;font-size:.92rem}
+.disclaimer strong{color:#fff}
+
+/* footer */
+footer{background:var(--coal);color:#c9a89b;padding:44px 0;margin-top:70px;font-size:.9rem}
+footer .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+footer .brand{color:#ffe7d4}
+.flame-mark{display:inline-block;width:34px;height:34px}
+
+@media(max-width:900px){
+  .grid-3{grid-template-columns:1fr}
+  .grid-2{grid-template-columns:1fr}
+  .chart-card{grid-template-columns:1fr}
+  .about-card{grid-template-columns:1fr}
+  .risk-grid{grid-template-columns:repeat(2,1fr)}
+  .hero h1{font-size:2.2rem}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 32 32" fill="none"><defs><linearGradient id="fireg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f5b061"/><stop offset="1" stop-color="#d94a2e"/></linearGradient></defs><path d="M16 2C16 2 8 11 8 18a8 8 0 0 0 16 0C24 11 16 2 16 2z" fill="url(#fireg)"/><path d="M16 12C16 12 12 16 12 19a4 4 0 0 0 8 0c0-3-1.5-5-4-7z" fill="#ffd9b3"/></svg>
+      维克多趋势交易系统
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">大师介绍</a></li>
+      <li><a href="#overview">系统概览</a></li>
+      <li><a href="#double-break">双突破</a></li>
+      <li><a href="#rule123">123法则</a></li>
+      <li><a href="#rule2b">2B法则</a></li>
+      <li><a href="#process">系统流程</a></li>
+      <li><a href="#signals">信号对照</a></li>
+      <li><a href="#risk">风险控制</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <svg class="flame-float f1" viewBox="0 0 32 32"><path d="M16 2C16 2 8 11 8 18a8 8 0 0 0 16 0C24 11 16 2 16 2z" fill="#f5b061"/></svg>
+  <svg class="flame-float f2" viewBox="0 0 32 32"><path d="M16 2C16 2 8 11 8 18a8 8 0 0 0 16 0C24 11 16 2 16 2z" fill="#ffd9b3"/></svg>
+  <svg class="flame-float f3" viewBox="0 0 32 32"><path d="M16 2C16 2 8 11 8 18a8 8 0 0 0 16 0C24 11 16 2 16 2z" fill="#f0883e"/></svg>
+
+  <div class="wrap hero-inner">
+    <span class="kicker">🌋 顺势而为 · 抓反转 · 控风险</span>
+    <h1>维克多<span>趋势交易系统</span></h1>
+    <p class="sub">融合 <strong>双突破</strong>、<strong>123 法则</strong> 与 <strong>2B 法则</strong> 三大经典反转信号，用「环境判定 → 信号共振 → 风险控制 → 趋势离场」四层结构，构建一套纪律化、可复制的趋势反转交易框架。</p>
+    <div class="hero-meta">
+      <span class="chip">双突破 · 定环境</span>
+      <span class="chip">123 · 主信号</span>
+      <span class="chip">2B · 增强信号</span>
+      <span class="chip">单笔风险 ≤ 2%</span>
+    </div>
+  </div>
+  <div class="hero-wave">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path d="M0,60 C240,100 480,20 720,40 C960,60 1200,10 1440,50 L1440,90 L0,90 Z" fill="#fbf2ec"/></svg>
+  </div>
+</header>
+
+<section id="about" style="padding-top:0">
+  <div class="wrap">
+    <div class="about-card">
+      <div class="about-fig">
+        <img src="/upload/2026/2026-08/维克多斯波朗迪.jpg" alt="维克多·斯波朗迪 Victor Sperandeo">
+      </div>
+      <div class="about-body">
+        <span class="tag">系统奠基人</span>
+        <h3>维克多·斯波朗迪</h3>
+        <div class="en">Victor Sperandeo · 绰号「Trader Vic」</div>
+        <p>华尔街传奇交易员，三十余年交易生涯以惊人的稳定盈利著称，尤其擅长在重大趋势反转的拐点精准进出场。其代表作《专业投机原理》（Methods of a Wall Street Master）被奉为交易经典，书中提出的 <b>1-2-3 法则</b> 与 <b>2B 法则</b>，正是本系统三大信号的理论源头。</p>
+        <ul class="about-facts">
+          <li><b>1-2-3 法则</b>：突破趋势线 → 回踩不创新低/高 → 突破反弹点，三步确认反转</li>
+          <li><b>2B 法则</b>：捕捉假突破陷阱，在拐点提前精准入场</li>
+          <li><b>趋势判定</b>：顺应大级别趋势，只在关键反转信号出现时出手</li>
+          <li><b>风控哲学</b>：耐心等待高胜率信号，严格止损</li>
+        </ul>
+        <div class="quote">「当趋势真正改变时，价格行为会先于消息告诉你一切。」</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="overview">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">System Overview</span>
+      <h2>系统核心理念</h2>
+      <p>市场如火山运动：趋势是岩浆的流向，信号是喷发的征兆，风控是地壳的防线。只做大方向明确、信号共振、风险可控的交易，其余时间耐心等待。</p>
+    </div>
+    <div class="grid grid-3">
+      <div class="card">
+        <div class="num">1</div>
+        <h3>顺势——双突破定方向</h3>
+        <p>先用「长期趋势线 + 形态颈线」的双突破判定大级别趋势是否反转，只允许在突破方向上开仓，绝不逆势。</p>
+      </div>
+      <div class="card">
+        <div class="num">2</div>
+        <h3>共振——123 + 2B 入场</h3>
+        <p>以 123 法则为主信号、2B 法则为增强信号，配合放量与背离过滤，信号共振时才扣动扳机，追求高胜率与高盈亏比。</p>
+      </div>
+      <div class="card">
+        <div class="num">3</div>
+        <h3>守本——纪律化风控</h3>
+        <p>每一笔交易都预设止损与固定风险比例，让亏损可承受、可复制，保护本金如同加固火山口的防线。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="grid">
+
+      <div class="card chart-card" id="double-break">
+        <div class="chart-fig">
+          <svg viewBox="0 0 640 400" width="100%" style="max-width:600px">
+            <defs>
+              <linearGradient id="price1" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#b3301e"/><stop offset="1" stop-color="#e8582a"/>
+              </linearGradient>
+              <linearGradient id="vol1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#e8582a"/><stop offset="1" stop-color="#f5b061"/>
+              </linearGradient>
+            </defs>
+            <g stroke="#f1e2d8" stroke-width="1">
+              <line x1="0" y1="60" x2="640" y2="60"/><line x1="0" y1="120" x2="640" y2="120"/>
+              <line x1="0" y1="195" x2="640" y2="195"/><line x1="0" y1="265" x2="640" y2="265"/>
+            </g>
+            <line x1="40" y1="68" x2="332" y2="192" stroke="#7f1d1d" stroke-width="2" stroke-dasharray="7 6" opacity=".8"/>
+            <line x1="205" y1="195" x2="600" y2="195" stroke="#d94a2e" stroke-width="2" stroke-dasharray="9 7"/>
+            <polyline points="40,70 95,120 145,105 195,205 215,262 245,195 268,220 285,252 305,195 332,185 356,198 425,120 505,80 590,62"
+              fill="none" stroke="url(#price1)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="332" cy="185" r="6" fill="#f0a04b"/>
+            <circle cx="215" cy="262" r="5" fill="#d94a2e"/><circle cx="285" cy="252" r="5" fill="#d94a2e"/>
+            <g fill="url(#vol1)">
+              <rect x="130" y="320" width="22" height="42"/><rect x="190" y="312" width="22" height="50"/>
+              <rect x="250" y="308" width="22" height="54"/><rect x="300" y="290" width="22" height="72"/>
+              <rect x="360" y="268" width="22" height="94"/><rect x="430" y="284" width="22" height="78"/>
+              <rect x="500" y="300" width="22" height="62"/>
+            </g>
+            <text x="332" y="205" font-size="13" fill="#2b0f0e" font-weight="700">双突破点</text>
+            <text x="470" y="150" font-size="12" fill="#7f1d1d">颈线（突破）</text>
+            <text x="60" y="48" font-size="12" fill="#7f1d1d">下降趋势线（突破）</text>
+            <text x="270" y="290" font-size="11" fill="#6b4a42">放量突破</text>
+            <text x="60" y="370" font-size="12" fill="#6b4a42">成交量</text>
+          </svg>
+        </div>
+        <div class="chart-body">
+          <span class="rule-tag">信号一 · 定环境</span>
+          <h3>双突破（Double Breakout）</h3>
+          <p>在长期下跌末端，价格<b>同时</b>向上突破两条关键压力：<b>长期下降趋势线</b> 与 <b>底部形态颈线</b>（双底 / 头肩底 / 圆弧底等）。</p>
+          <ul class="pill-list">
+            <li><b>条件 A</b>：收盘价站上长期下降趋势线</li>
+            <li><b>条件 B</b>：收盘价突破底部形态颈线</li>
+            <li><b>确认</b>：突破伴随<b>放量</b>，信号可信度显著提升</li>
+            <li><b>结论</b>：双突破成立 → 大级别由空转多，此后<b>只做多</b></li>
+          </ul>
+          <p style="margin-top:12px">空头方向镜像同理：长期上升趋势线 + 顶部形态颈线同时被跌破 → 转空。</p>
+        </div>
+      </div>
+
+      <div class="card chart-card" id="rule123">
+        <div class="chart-fig">
+          <svg viewBox="0 0 640 340" width="100%" style="max-width:600px">
+            <defs>
+              <linearGradient id="price2" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#b3301e"/><stop offset="1" stop-color="#e8582a"/>
+              </linearGradient>
+            </defs>
+            <g stroke="#f1e2d8" stroke-width="1">
+              <line x1="0" y1="70" x2="640" y2="70"/><line x1="0" y1="140" x2="640" y2="140"/>
+              <line x1="0" y1="210" x2="640" y2="210"/><line x1="0" y1="275" x2="640" y2="275"/>
+            </g>
+            <line x1="40" y1="55" x2="300" y2="194" stroke="#7f1d1d" stroke-width="2" stroke-dasharray="7 6" opacity=".8"/>
+            <line x1="300" y1="165" x2="470" y2="165" stroke="#d94a2e" stroke-width="1.6" stroke-dasharray="4 4" opacity=".6"/>
+            <polyline points="40,55 120,170 180,130 240,220 300,165 340,205 395,145 470,95 570,70"
+              fill="none" stroke="url(#price2)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="300" cy="165" r="6" fill="#f0a04b"/>
+            <circle cx="340" cy="205" r="6" fill="#e8582a"/>
+            <circle cx="395" cy="145" r="7" fill="#7f1d1d"/>
+            <text x="314" y="172" font-size="15" fill="#2b0f0e" font-weight="900">1</text>
+            <text x="354" y="212" font-size="15" fill="#2b0f0e" font-weight="900">2</text>
+            <text x="409" y="148" font-size="15" fill="#7f1d1d" font-weight="900">3</text>
+            <text x="60" y="45" font-size="12" fill="#7f1d1d">下降趋势线</text>
+            <text x="130" y="152" font-size="11" fill="#6b4a42">更高低点(HL)</text>
+            <text x="470" y="140" font-size="11" fill="#7f1d1d" font-weight="700">点3 → 买入</text>
+          </svg>
+        </div>
+        <div class="chart-body">
+          <span class="rule-tag">信号二 · 主入场</span>
+          <h3>123 法则（主信号）</h3>
+          <p>反转三部曲，结构清晰、可量化，是整套系统的主力入场依据。</p>
+          <ul class="pill-list">
+            <li><b>点 1</b>：价格向上<b>突破下降趋势线</b></li>
+            <li><b>点 2</b>：回踩<b>不再创新低</b>，形成更高低点（Higher Low）</li>
+            <li><b>点 3</b>：价格<b>升破点 2 反弹高点</b> → 买入信号确认</li>
+            <li><b>止损</b>：置于点 2 低点下方（留出缓冲）</li>
+          </ul>
+          <p style="margin-top:12px">空头镜像：跌破上升趋势线 → 反弹不创新高（Lower High）→ 跌破反弹低点，即为做空信号。</p>
+        </div>
+      </div>
+
+      <div class="card chart-card" id="rule2b">
+        <div class="chart-fig">
+          <svg viewBox="0 0 640 340" width="100%" style="max-width:600px">
+            <defs>
+              <linearGradient id="price3" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#b3301e"/><stop offset="1" stop-color="#e8582a"/>
+              </linearGradient>
+            </defs>
+            <g stroke="#f1e2d8" stroke-width="1">
+              <line x1="0" y1="70" x2="640" y2="70"/><line x1="0" y1="140" x2="640" y2="140"/>
+              <line x1="0" y1="210" x2="640" y2="210"/><line x1="0" y1="275" x2="640" y2="275"/>
+            </g>
+            <line x1="40" y1="170" x2="330" y2="170" stroke="#d94a2e" stroke-width="2" stroke-dasharray="9 7"/>
+            <polyline points="40,80 90,130 130,110 175,168 195,168 220,135 260,155 285,225 320,160 375,110 455,85 570,65"
+              fill="none" stroke="url(#price3)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="285" cy="225" r="6" fill="#f0a04b"/>
+            <circle cx="320" cy="160" r="7" fill="#7f1d1d"/>
+            <text x="230" y="160" font-size="12" fill="#7f1d1d">前低（支撑）</text>
+            <text x="250" y="245" font-size="11" fill="#f0a04b" font-weight="700">假跌破 · 空头陷阱</text>
+            <text x="340" y="148" font-size="12" fill="#7f1d1d" font-weight="700">2B 买点</text>
+          </svg>
+        </div>
+        <div class="chart-body">
+          <span class="rule-tag">信号三 · 增强入场</span>
+          <h3>2B 法则（增强信号）</h3>
+          <p>专抓「假突破陷阱」，比 123 更早、入场点更优，用于提前进场或与 123 共振加成。</p>
+          <ul class="pill-list">
+            <li>下跌趋势中价格<b>创新低</b>，但<b>快速拉回站上前低</b> → 空头陷阱，看多</li>
+            <li>与 123 同时出现时，共振信号<b>胜率最高</b>，是系统最佳入场形态</li>
+            <li><b>止损</b>：置于假突破低点下方</li>
+            <li>空头镜像：创新高后迅速跌回前高之下 → 多头陷阱，看空</li>
+          </ul>
+          <p style="margin-top:12px">注意：2B 属逆势抄底摸顶，<b>胜率偏低、盈亏比高</b>，必须严格止损。</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="add-position" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">Position Adding</span>
+      <h2>利用持续形态加仓</h2>
+      <p>底仓建立后，趋势不会直线运行，中途的整理（持续形态）正是顺势加码、放大利润的最佳时机。本章提供两种加仓方式：<b>方式一</b>顺势突破加仓（稳健），<b>方式二</b>假跌破加仓（2B 法则，更早更优）。</p>
+    </div>
+    <div class="grid">
+      <div class="card chart-card">
+        <div class="chart-fig">
+          <svg viewBox="0 0 640 400" width="100%" style="max-width:600px">
+            <defs>
+              <linearGradient id="price4" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#b3301e"/><stop offset="1" stop-color="#e8582a"/>
+              </linearGradient>
+            </defs>
+            <g stroke="#f1e2d8" stroke-width="1">
+              <line x1="0" y1="70" x2="640" y2="70"/><line x1="0" y1="140" x2="640" y2="140"/>
+              <line x1="0" y1="210" x2="640" y2="210"/><line x1="0" y1="280" x2="640" y2="280"/>
+            </g>
+            <polygon points="190,168 325,202 325,258 190,224" fill="#fde4d8" opacity=".7"/>
+            <line x1="190" y1="168" x2="325" y2="202" stroke="#d94a2e" stroke-width="2" stroke-dasharray="9 7"/>
+            <line x1="190" y1="224" x2="325" y2="258" stroke="#d94a2e" stroke-width="2" stroke-dasharray="9 7"/>
+            <line x1="190" y1="238" x2="325" y2="272" stroke="#7f1d1d" stroke-width="2" stroke-dasharray="4 4"/>
+            <polyline points="40,310 100,240 140,255 190,175 235,210 265,185 295,215 320,200 350,170 415,115 485,85 565,60"
+              fill="none" stroke="url(#price4)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="350" cy="170" r="7" fill="#f0a04b"/>
+            <text x="60" y="270" font-size="12" fill="#7f1d1d">上涨趋势（底仓已建）</text>
+            <text x="175" y="150" font-size="12" fill="#7f1d1d" font-weight="700">旗形整理</text>
+            <text x="360" y="158" font-size="12" fill="#2b0f0e" font-weight="700">加仓</text>
+            <text x="180" y="292" font-size="11" fill="#7f1d1d" font-weight="700">止损 · 跌回形态内离场</text>
+          </svg>
+        </div>
+        <div class="chart-body">
+          <span class="rule-tag">加仓方式一 · 顺势突破</span>
+          <h3>突破持续形态加仓</h3>
+          <p>底仓由反转信号建立后，趋势中途的持续形态整理，<b>顺势向上突破</b>是最稳健的加仓信号。</p>
+          <ul class="pill-list">
+            <li><b>识别形态</b>：旗形、三角旗、三角形、矩形、楔形</li>
+            <li><b>加仓触发</b>：价格<b>放量突破</b>形态上边界（多头）</li>
+            <li><b>止损设置</b>：跌破形态下边界 / 形态内低点，<b>跌回形态内即离场</b></li>
+            <li><b>仓位约束</b>：单次加仓风险 ≤ 2%，总仓位风险 ≤ 20%</li>
+          </ul>
+          <p style="margin-top:12px">空头镜像：跌破持续形态下边界加空，价格反弹回形态内即止损。</p>
+        </div>
+      </div>
+
+      <div class="card chart-card">
+        <div class="chart-fig">
+          <svg viewBox="0 0 640 400" width="100%" style="max-width:600px">
+            <defs>
+              <linearGradient id="price5" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#b3301e"/><stop offset="1" stop-color="#e8582a"/>
+              </linearGradient>
+            </defs>
+            <g stroke="#f1e2d8" stroke-width="1">
+              <line x1="0" y1="70" x2="640" y2="70"/><line x1="0" y1="140" x2="640" y2="140"/>
+              <line x1="0" y1="210" x2="640" y2="210"/><line x1="0" y1="280" x2="640" y2="280"/>
+            </g>
+            <rect x="150" y="180" width="200" height="55" fill="#fde4d8" opacity=".7"/>
+            <line x1="150" y1="180" x2="350" y2="180" stroke="#d94a2e" stroke-width="2" stroke-dasharray="9 7"/>
+            <line x1="150" y1="235" x2="350" y2="235" stroke="#d94a2e" stroke-width="2" stroke-dasharray="9 7"/>
+            <line x1="250" y1="278" x2="340" y2="278" stroke="#7f1d1d" stroke-width="2" stroke-dasharray="4 4"/>
+            <polyline points="40,300 100,240 150,205 190,185 220,205 245,185 265,232 285,262 310,210 335,182 350,160 415,110 485,85 565,60"
+              fill="none" stroke="url(#price5)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="285" cy="262" r="6" fill="#7f1d1d"/>
+            <circle cx="310" cy="210" r="7" fill="#f0a04b"/>
+            <text x="45" y="270" font-size="12" fill="#7f1d1d">上涨趋势（底仓已建）</text>
+            <text x="165" y="168" font-size="12" fill="#7f1d1d" font-weight="700">箱体整理（持续形态）</text>
+            <text x="250" y="302" font-size="11" fill="#7f1d1d" font-weight="700">假跌破 · 空头陷阱</text>
+            <text x="322" y="198" font-size="12" fill="#2b0f0e" font-weight="700">2B 加仓点</text>
+            <text x="150" y="320" font-size="11" fill="#7f1d1d" font-weight="700">止损 · 假跌破低点下方</text>
+          </svg>
+        </div>
+        <div class="chart-body">
+          <span class="rule-tag">加仓方式二 · 假跌破陷阱</span>
+          <h3>假跌破加仓（2B 法则）</h3>
+          <p>持续形态整理末端，价格<b>假跌破形态下边界</b>（诱空）后快速拉回——这是 2B 法则在持续形态中的运用，<b>入场更早、点位更优</b>。</p>
+          <ul class="pill-list">
+            <li><b>识别信号</b>：价格跌破形态下边界，但<b>快速拉回站回形态内</b>（空头陷阱）</li>
+            <li><b>加仓触发</b>：拉回站回形态下边界上方即可加仓，无需等突破</li>
+            <li><b>止损设置</b>：置于<b>假跌破低点下方</b></li>
+            <li><b>组合用法</b>：可先 2B 轻仓加、突破上边界再加码，与方式一叠加</li>
+          </ul>
+          <p style="margin-top:12px">空头镜像：价格假突破形态上边界（诱多）后快速回落，即 2B 加空信号。</p>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-3" style="margin-top:22px">
+      <div class="card">
+        <div class="num">1</div>
+        <h3>识别持续形态</h3>
+        <p>旗形（Flag）、三角旗（Pennant）；三角形：对称 / 上升 / 下降；矩形箱体、楔形。本质是趋势中的健康回调，整理后大概率延续原趋势。</p>
+      </div>
+      <div class="card">
+        <div class="num">2</div>
+        <h3>加仓纪律</h3>
+        <p>只顺大趋势方向加仓，绝不逆势补仓；突破或拉回须放量确认；单次加仓风险 ≤ 2%，总仓位风险 ≤ 20%，加仓量一般不超过底仓。</p>
+      </div>
+      <div class="card">
+        <div class="num">3</div>
+        <h3>加仓后管理</h3>
+        <p>加仓后立即上移止损至保本；沿趋势线 / 均线移动跟踪；出现反向 123 / 2B 信号全部离场；跌破形态边界即止损，绝不扛单。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="process" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">Workflow</span>
+      <h2>系统执行流程</h2>
+      <p>四道关卡，环环相扣。任何一关不满足，都不进入下一关，宁可错过，不可做错。</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="dot">1</div>
+        <h4>环境判定 —— 双突破定方向</h4>
+        <p>画出长期趋势线与形态颈线，等待「双突破」确认大级别反转。</p>
+        <div class="sub">趋势线突破 + 颈线突破 + 放量 → 确定唯一可交易方向</div>
+      </div>
+      <div class="step">
+        <div class="dot">2</div>
+        <h4>信号触发 —— 123 为主、2B 为辅</h4>
+        <p>在既定方向上等待 123 法则点 3 确认；若出现 2B 假突破陷阱，可提前或加重信号权重。</p>
+        <div class="sub">主信号 123 必现；2B 为增强项，二者共振 = 最优信号</div>
+      </div>
+      <div class="step">
+        <div class="dot">3</div>
+        <h4>入场与风控 —— 固定风险比例</h4>
+        <p>依据止损距离倒推仓位，单笔风险锁定在账户 2% 以内。</p>
+        <div class="sub">仓位 = (账户 × 2%) ÷ (入场价 − 止损价)</div>
+      </div>
+      <div class="step">
+        <div class="dot">4</div>
+        <h4>持仓与离场 —— 让利润奔跑</h4>
+        <p>首目标看前高 / 形态测算位；随后用移动止损沿趋势线跟踪，反向 123 / 2B 或跌破趋势线即离场。</p>
+        <div class="sub">截断亏损、让利润奔跑</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="signals" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">Signal Matrix</span>
+      <h2>多空信号对照表</h2>
+      <p>三个方法在多头与空头下的镜像对照，便于快速识别与核对。</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>方法</th>
+            <th>多头信号</th>
+            <th>空头信号</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>双突破</td>
+            <td><span class="flag long">做多</span> 跌破长期下降趋势线后，价格向上突破趋势线 + 底部颈线，且放量</td>
+            <td><span class="flag short">做空</span> 突破长期上升趋势线后，价格向下跌破趋势线 + 顶部颈线，且放量</td>
+          </tr>
+          <tr>
+            <td>123 法则</td>
+            <td><span class="flag long">做多</span> 点1突破趋势线 → 点2不创新低(HL) → 点3升破反弹高点</td>
+            <td><span class="flag short">做空</span> 点1跌破趋势线 → 点2不创新高(LH) → 点3跌破反弹低点</td>
+          </tr>
+          <tr>
+            <td>2B 法则</td>
+            <td><span class="flag long">做多</span> 创新低后快速拉回并站上前低（空头陷阱）</td>
+            <td><span class="flag short">做空</span> 创新高后快速回落并跌破前高（多头陷阱）</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="risk" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">Risk Control</span>
+      <h2>风险控制与仓位管理</h2>
+      <p>再好的信号，没有风控都是空中楼阁。以下铁律，一笔都不能破。</p>
+    </div>
+    <div class="risk-grid">
+      <div class="risk-item"><div class="val">2%</div><div class="lbl">单笔最大风险</div></div>
+      <div class="risk-item"><div class="val">20%</div><div class="lbl">总持仓风险上限</div></div>
+      <div class="risk-item"><div class="val">≥3:1</div><div class="lbl">最低盈亏比要求</div></div>
+      <div class="risk-item"><div class="val">1:1</div><div class="lbl">保本移动止损</div></div>
+    </div>
+    <div class="formula">
+      仓位手数 = <code>账户资金 × 2%</code> ÷ <code>入场价 − 止损价</code>
+    </div>
+    <div class="disclaimer">
+      <strong>免责声明：</strong>本页面所载交易系统仅为技术分析方法的教学与交流，不构成任何投资建议或操作指令。市场有风险，投资须谨慎。所有交易决策与后果均由投资者本人独立判断并承担，作者不对任何盈亏负责。
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand">
+      <svg class="flame-mark" viewBox="0 0 32 32" fill="none"><defs><linearGradient id="fireg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f5b061"/><stop offset="1" stop-color="#d94a2e"/></linearGradient></defs><path d="M16 2C16 2 8 11 8 18a8 8 0 0 0 16 0C24 11 16 2 16 2z" fill="url(#fireg2)"/><path d="M16 12C16 12 12 16 12 19a4 4 0 0 0 8 0c0-3-1.5-5-4-7z" fill="#ffd9b3"/></svg>
+      维克多趋势交易系统
+    </div>
+    <div>双突破 × 123 法则 × 2B 法则 · 顺势 · 共振 · 守本</div>
+  </div>
+</footer>
+
+ <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+ <script>LA.init({ id: "1yxI18dBtpOcAN9I", ck: "1yxI18dBtpOcAN9I" })</script>
+</body>
+</html>
